@@ -1,5 +1,7 @@
 = Spring Security Policy
 
-This repository is used to https://github.com/spring-projects/security-advisories/security/advisories/new[report security advisories] to any Spring Project.
+You can create a draft security advisory by https://github.com/spring-projects/security-advisories/security/advisories/new[[clicking here].
+
+This repository is used to report security advisories to any Spring Project.
 It is an empty repository, so that collaborators can add code from any repository to the private forks created for the advisories.
 Please see https://spring.io/security-policy
