@@ -1,8 +1,332 @@
 = Spring Security Policy
+// See A Hypothetical CVE Report for attributes; Collaboration Setup writes {ghsa-remote-name}-setup.sh under {base-clone-dir}.
+:ghsa-name-with-owner: spring-projects/security-advisories-ghsa-3rf2-292v-g6wr
+:ghsa-remote-name: ghsa-path-validation
+:base-clone-dir: $HOME/code/spring-projects/security-advisories
+:cve-sample-dir: $HOME/code/rwinch/spring-sample/main/
+:public-name-with-owner: spring-projects/spring-framework
+:public-repo-remote-name: spring-framework
+:target-branch: 7.0.x
 
 Before creating a report, please read through this document.
 
 As documented at https://spring.io/security-policy, this repository is used to report security advisories to any Spring Project.
+
+[[collaborating-with-code]]
+== Collaborating with code
+
+Collaboration should use a https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/collaborating-in-a-temporary-private-fork-to-resolve-a-repository-security-vulnerability[temporary private fork] of this repository.
+
+This section outlines how to collaborate on a security advisory and is divided into the following subsections:
+
+* <<hypothetical-cve-report,A Hypothetical CVE Report>>
+* <<collaboration-setup,Collaboration Setup>>
+* <<sharing-sample,Sharing the sample>>
+* <<using-sample,Using the sample>>
+* <<producing-fix,Producing a fix>>
+
+
+[[hypothetical-cve-report]]
+=== A Hypothetical CVE Report
+
+Throughout this documentation, we will use an example report related to a hypothetical **CVE in Spring Framework related to path validation**.
+For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} and the branch of `{target-branch}`.
+
+[[collaboration-setup]]
+=== Collaboration Setup
+
+Before you start, you need to set up the environment for <<collaborating-with-code,Collaborating with code>>.
+To do this, you will need to create a setup script that will be used to set up the environment for the rest of the steps.
+The <<setup-shell-variables,shell variable table>> lists each variable and what it is for.
+
+[[setup-shell-variables]]
+[cols="1,2",options="header"]
+|===
+|Shell variable |Role
+
+|`GHSA_NAME_WITH_OWNER` |Advisory fork `owner/repo` (e.g. `{ghsa-name-with-owner}`) used to derive the URL to clone the advisory fork (e.g. `git@github.com:{ghsa-name-with-owner}.git`).
+
+|`BASE_CLONE_DIR` |Parent directory for clones (e.g. `{base-clone-dir}`).
+
+|`GHSA_REMOTE_NAME` |The directory to clone into and the remote name for the clone (e.g. `{ghsa-remote-name}`).
+
+|`CVE_SAMPLE_DIR` |Where the existing sample directory should be copied from (e.g. `{cve-sample-dir}`) into the private temporary fork clone.
+
+|`PUBLIC_NAME_WITH_OWNER` |Public repository `owner/repo` (e.g. `{public-name-with-owner}`) used to derive the remote to clone the repository with the CVE in it (e.g. `https://github.com/{public-name-with-owner}.git`)
+
+|`PUBLIC_REPO_REMOTE_NAME` |The remote name used for the public repository (e.g. `{public-repo-remote-name}`).
+
+|`TARGET_BRANCH` |Branch name with the CVE in it (e.g. `{target-branch}`).
+
+|`GHSA_SETUP_SCRIPT` |Absolute path to the generated setup script (e.g. `{base-clone-dir}/{ghsa-remote-name}-setup.sh`). Later steps `source` this file to load the exports.
+|===
+
+[NOTE]
+====
+If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
+After you change defaults, run <<collaboration-setup,Collaboration Setup>> again so `{base-clone-dir}/{ghsa-remote-name}-setup.sh` is regenerated.
+====
+
+The script below will create the variables used throughout the rest of the documentation.
+Before running the script, update it below according to <<setup-shell-variables,the shell variables>> descriptions.
+
+[source,shell,subs=+attributes]
+----
+# Advisory walkthrough defaults — re-create via Collaboration Setup when document attributes change.
+GHSA_NAME_WITH_OWNER='{ghsa-name-with-owner}'
+GHSA_REMOTE_NAME='{ghsa-remote-name}'
+BASE_CLONE_DIR="{base-clone-dir}"
+##
+# Only needed for the reporter sharing the sample
+CVE_SAMPLE_DIR='{cve-sample-dir}'
+##
+# Only needed for the team member fixing
+PUBLIC_NAME_WITH_OWNER='{public-name-with-owner}'
+PUBLIC_REPO_REMOTE_NAME='{public-repo-remote-name}'
+TARGET_BRANCH='{target-branch}'
+
+#######
+# Unlikely to need editing below this line
+#######
+GHSA_SETUP_SCRIPT="${BASE_CLONE_DIR}/${GHSA_REMOTE_NAME}-setup.sh"
+mkdir -p "$BASE_CLONE_DIR"
+cat > "$GHSA_SETUP_SCRIPT" <<ENDADVISORYSETUP
+#!/usr/bin/env bash
+# Advisory walkthrough defaults — re-create via Collaboration Setup when document attributes change.
+export GHSA_NAME_WITH_OWNER="$\{GHSA_NAME_WITH_OWNER}"
+export GHSA_REMOTE_NAME="$\{GHSA_REMOTE_NAME}"
+export BASE_CLONE_DIR="$\{BASE_CLONE_DIR}"
+##
+# Only needed for the reporter sharing the sample
+export CVE_SAMPLE_DIR="$\{CVE_SAMPLE_DIR}"
+##
+# Only needed for the team member fixing
+export PUBLIC_NAME_WITH_OWNER="$\{PUBLIC_NAME_WITH_OWNER}"
+export PUBLIC_REPO_REMOTE_NAME="$\{PUBLIC_REPO_REMOTE_NAME}"
+export TARGET_BRANCH="$\{TARGET_BRANCH}"
+
+#######
+# Unlikely to need editing below this line
+#######
+export GHSA_REMOTE_URL="git@github.com:$\{GHSA_NAME_WITH_OWNER}.git"
+export GHSA_SETUP_SCRIPT="$\{GHSA_SETUP_SCRIPT}"
+ENDADVISORYSETUP
+chmod +x "$GHSA_SETUP_SCRIPT"
+source "$GHSA_SETUP_SCRIPT"
+----
+
+[[sharing-sample]]
+=== Sharing the sample
+
+Before you report a security advisory, you should already have a minimal reproducer (a sample).
+As the *reporter*, sharing the sample means pushing it to the *private temporary fork* for that advisory on a branch named `sample`, so the team can review it without publishing to the public repository or a public issue.
+
+The steps are:
+
+. <<sharing-sample-create-branch,Creating the sample branch>>
+. <<sharing-sample-commit,Committing the sample branch>>
+. <<sharing-sample-push,Pushing the sample branch>>
+
+Review each block before you run it, align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment, and complete <<collaboration-setup,Collaboration Setup>> once so the setup script exists.
+
+[[sharing-sample-create-branch]]
+==== Creating the sample branch
+
+This section creates an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+
+#########
+# Creating the sample branch
+# mkdir -p "{base-clone-dir}"
+# cd "{base-clone-dir}"
+mkdir -p "$BASE_CLONE_DIR"
+cd "$BASE_CLONE_DIR"
+# Clone the advisory fork into directory {ghsa-remote-name}
+# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
+# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
+git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
+# cd "{ghsa-remote-name}"
+cd "$GHSA_REMOTE_NAME"
+# git switch requires Git 2.23+ (--orphan removes tracked files from the working tree).
+git switch --orphan sample
+# Empty commit so refs/heads/sample exists (otherwise checkout/switch sample fails later or in a new shell).
+git commit --allow-empty -m "Start sample branch"
+----
+
+[[sharing-sample-commit]]
+==== Committing the sample branch
+Copy the sample directory to the `sample` branch and commit the changes.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+# cd "{base-clone-dir}/{ghsa-remote-name}"
+cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
+git switch sample
+
+#########
+# Committing the sample branch
+# rsync copies the sample without bringing over `.git` (or any nested `.git` directories).
+# rsync -a --exclude='.git' "{cve-sample-dir}"/ .
+rsync -a --exclude='.git' "$CVE_SAMPLE_DIR"/ .
+git add -A
+git commit -m "Add sample"
+----
+
+[[sharing-sample-push]]
+==== Pushing the sample branch
+
+Push branch `sample` to the advisory remote and print the GitHub URL for reviewers.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+# cd "{base-clone-dir}/{ghsa-remote-name}"
+cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
+git switch sample
+
+#########
+# Pushing the sample branch
+# git push -u "{ghsa-remote-name}" sample
+git push -u "$GHSA_REMOTE_NAME" sample
+# echo View the sample at https://github.com/{ghsa-name-with-owner}/tree/sample
+echo "View the sample at https://github.com/${GHSA_NAME_WITH_OWNER}/tree/sample"
+----
+
+You can now view the sample at https://github.com/{ghsa-name-with-owner}/tree/sample.
+
+[[using-sample]]
+=== Using the sample
+
+As a *team member*, using the sample means checking out branch `sample` from the *private temporary fork* for that advisory so you have the reporter's reproducer locally, then following their run and reproduce instructions (for example in the project tree or advisory notes).
+You need access to that fork (for example as a collaborator on the draft advisory).
+
+The script below is *an example* of how you can do that with Git: clone the fork and switch to branch `sample`.
+Review it carefully before you run it, and use the same defaults as <<sharing-sample,Sharing the sample>> when you share the reporter's layout (see <<hypothetical-cve-report,A Hypothetical CVE Report>> and <<collaboration-setup,Collaboration Setup>>).
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+
+#########
+# Using the sample
+# mkdir -p "{base-clone-dir}"
+# cd "{base-clone-dir}"
+mkdir -p "$BASE_CLONE_DIR"
+cd "$BASE_CLONE_DIR"
+# Clone the advisory fork into directory {ghsa-remote-name}
+# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
+# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
+git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
+# cd "{ghsa-remote-name}"
+cd "$GHSA_REMOTE_NAME"
+# git switch sample
+git switch sample
+----
+
+[[producing-fix]]
+=== Producing a fix
+
+This section describes how to *produce a fix* and share it on the private temporary fork.
+The steps are:
+
+. <<producing-fix-add-remote,Adding the remote and branch>>
+. <<producing-fix-apply-fix,Applying the fix>>
+. <<producing-fix-push,Pushing the fix>>
+. <<producing-fix-notify-sample,Notifying the reporter and the `sample` branch>>
+
+Review each block before you run it, align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment, and complete <<collaboration-setup,Collaboration Setup>> once so the setup script exists.
+
+[[producing-fix-add-remote]]
+==== Adding the remote and branch
+
+First, add the remote of the impacted repository (e.g. {public-name-with-owner}) to the private temporary fork clone.
+Then, create a branch from the remote branch (e.g. {target-branch}) that contains the CVE.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+# cd "{base-clone-dir}/{ghsa-remote-name}"
+cd "$BASE_CLONE_DIR"/"$GHSA_REMOTE_NAME"
+
+#########
+# Adding the remote and branch
+# HTTPS URL and a dedicated remote alias reduce the chance of pushing to the wrong GitHub repository.
+# git remote add "{public-repo-remote-name}" "https://github.com/{public-name-with-owner}.git"
+git remote add "$PUBLIC_REPO_REMOTE_NAME" "https://github.com/${PUBLIC_NAME_WITH_OWNER}.git"
+# git fetch "{public-repo-remote-name}"
+git fetch "$PUBLIC_REPO_REMOTE_NAME"
+# git switch -c "{target-branch}" "{public-repo-remote-name}/{target-branch}"
+git switch -c "$TARGET_BRANCH" "$PUBLIC_REPO_REMOTE_NAME/$TARGET_BRANCH"
+----
+
+[[producing-fix-apply-fix]]
+==== Applying the fix
+
+Edit the codebase (for example the files that implement path validation), run tests or the reporter’s reproducer, then stage and commit on `TARGET_BRANCH`.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+# cd "{base-clone-dir}/{ghsa-remote-name}"
+cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
+git switch "$TARGET_BRANCH"
+
+#########
+# Applying the fix
+# Edit sources as needed, then stage and commit.
+git add -A
+git commit -m "Fix CVE"
+----
+
+[[producing-fix-push]]
+==== Pushing the fix
+
+Push the fix by publishing `TARGET_BRANCH` to the advisory remote so the team can review it on the private fork.
+
+[source,shell,subs=+attributes]
+----
+#########
+: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+# cd "{base-clone-dir}/{ghsa-remote-name}"
+cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
+git switch "$TARGET_BRANCH"
+
+#########
+# Pushing the fix
+# git push -u "{ghsa-remote-name}" "{target-branch}"
+git push -u "$GHSA_REMOTE_NAME" "$TARGET_BRANCH"
+# echo Fix branch (HTTPS): https://github.com/{ghsa-name-with-owner}/tree/{target-branch}
+echo "Fix branch (HTTPS): https://github.com/${GHSA_NAME_WITH_OWNER}/tree/${TARGET_BRANCH}"
+----
+
+You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{target-branch}.
+
+[[producing-fix-notify-sample]]
+==== Notifying the reporter and the `sample` branch
+
+After <<producing-fix-push,Pushing the fix>>, notify the reporter and provide instructions for how to review the fix.
+If possible, you should consider updating the `sample` branch to demonstrate the fix.
+For example, you might update the `sample` branch to:
+
+* Align the version of the vulnerable dependency with the fix
+* Have a local Maven repository URL (e.g. Maven Local) and provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install` on the `TARGET_BRANCH` of the private fork).
 
 [[examples-of-vulnerabilities]]
 == Examples of Vulnerabilities
