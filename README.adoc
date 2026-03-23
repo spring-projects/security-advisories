@@ -123,6 +123,7 @@ As the *reporter*, sharing the sample means pushing it to the *private temporary
 
 The steps are:
 
+. <<collaboration-setup,Setup Collaboration>>
 . <<sharing-sample-create-branch,Creating the sample branch>>
 . <<sharing-sample-commit,Committing the sample branch>>
 . <<sharing-sample-push,Pushing the sample branch>>
@@ -211,7 +212,7 @@ As a *team member*, using the sample means checking out branch `sample` from the
 You need access to that fork (for example as a collaborator on the draft advisory).
 
 The script below is *an example* of how you can do that with Git: clone the fork and switch to branch `sample`.
-Review it carefully before you run it, and use the same defaults as <<sharing-sample,Sharing the sample>> when you share the reporter's layout (see <<hypothetical-cve-report,A Hypothetical CVE Report>> and <<collaboration-setup,Collaboration Setup>>).
+<<collaboration-setup,Setup Collaboration>> is required before you run this script.
 
 [source,shell,subs=+attributes]
 ----
@@ -241,6 +242,7 @@ git switch sample
 This section describes how to *produce a fix* and share it on the private temporary fork.
 The steps are:
 
+. <<using-sample,Using the sample>>
 . <<producing-fix-add-remote,Adding the remote and branch>>
 . <<producing-fix-apply-fix,Applying the fix>>
 . <<producing-fix-push,Pushing the fix>>
