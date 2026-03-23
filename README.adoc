@@ -115,7 +115,6 @@ chmod +x "$GHSA_SETUP_SCRIPT"
 source "$GHSA_SETUP_SCRIPT"
 # mkdir -p "{base-clone-dir}"
 # cd "{base-clone-dir}"
-mkdir -p "$BASE_CLONE_DIR"
 cd "$BASE_CLONE_DIR"
 # Clone the advisory fork into directory {ghsa-remote-name}
 # -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
@@ -216,17 +215,6 @@ source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT";
 
 #########
 # Using the sample
-# mkdir -p "{base-clone-dir}"
-# cd "{base-clone-dir}"
-mkdir -p "$BASE_CLONE_DIR"
-cd "$BASE_CLONE_DIR"
-# Clone the advisory fork into directory {ghsa-remote-name}
-# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
-# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
-git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
-# cd "{ghsa-remote-name}"
-cd "$GHSA_REMOTE_NAME"
-# git switch sample
 git switch sample
 ----
 
