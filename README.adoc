@@ -67,7 +67,7 @@ If you want to update the instructions throughout this documentation, you can up
 After you change defaults, run <<collaboration-setup,Collaboration Setup>> again so `{base-clone-dir}/{ghsa-remote-name}-setup.sh` is regenerated.
 ====
 
-The script below will create the variables used throughout the rest of the documentation.
+The script below will create the variables used throughout the rest of the documentation and it will clone the advisory fork and set the working directory to the clone.
 Before running the script, update it below according to <<setup-shell-variables,the shell variables>> descriptions.
 
 [source,shell,subs=+attributes]
@@ -113,6 +113,16 @@ export GHSA_SETUP_SCRIPT="$\{GHSA_SETUP_SCRIPT}"
 ENDADVISORYSETUP
 chmod +x "$GHSA_SETUP_SCRIPT"
 source "$GHSA_SETUP_SCRIPT"
+# mkdir -p "{base-clone-dir}"
+# cd "{base-clone-dir}"
+mkdir -p "$BASE_CLONE_DIR"
+cd "$BASE_CLONE_DIR"
+# Clone the advisory fork into directory {ghsa-remote-name}
+# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
+# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
+git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
+# cd "{ghsa-remote-name}"
+cd "$GHSA_REMOTE_NAME"
 ----
 
 [[sharing-sample]]
@@ -143,16 +153,6 @@ source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT";
 
 #########
 # Creating the sample branch
-# mkdir -p "{base-clone-dir}"
-# cd "{base-clone-dir}"
-mkdir -p "$BASE_CLONE_DIR"
-cd "$BASE_CLONE_DIR"
-# Clone the advisory fork into directory {ghsa-remote-name}
-# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
-# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
-git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
-# cd "{ghsa-remote-name}"
-cd "$GHSA_REMOTE_NAME"
 # git switch requires Git 2.23+ (--orphan removes tracked files from the working tree).
 git switch --orphan sample
 # Empty commit so refs/heads/sample exists (otherwise checkout/switch sample fails later or in a new shell).
@@ -161,16 +161,13 @@ git commit --allow-empty -m "Start sample branch"
 
 [[sharing-sample-commit]]
 ==== Committing the sample branch
-Copy the sample directory to the `sample` branch and commit the changes.
+After <<sharing-sample-create-branch,Creating the sample branch>>, copy the existing sample directory to the `sample` branch and commit the changes.
 
 [source,shell,subs=+attributes]
 ----
 #########
 : "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-# cd "{base-clone-dir}/{ghsa-remote-name}"
-cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
-git switch sample
 
 #########
 # Committing the sample branch
@@ -184,16 +181,13 @@ git commit -m "Add sample"
 [[sharing-sample-push]]
 ==== Pushing the sample branch
 
-Push branch `sample` to the advisory remote and print the GitHub URL for reviewers.
+After <<sharing-sample-commit,Committing the sample branch>>, push branch `sample` to the advisory remote and print the GitHub URL for reviewers.
 
 [source,shell,subs=+attributes]
 ----
 #########
 : "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-# cd "{base-clone-dir}/{ghsa-remote-name}"
-cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
-git switch sample
 
 #########
 # Pushing the sample branch
@@ -242,7 +236,7 @@ git switch sample
 This section describes how to *produce a fix* and share it on the private temporary fork.
 The steps are:
 
-. <<using-sample,Using the sample>>
+. <<collaboration-setup,Setup Collaboration>>
 . <<producing-fix-add-remote,Adding the remote and branch>>
 . <<producing-fix-apply-fix,Applying the fix>>
 . <<producing-fix-push,Pushing the fix>>
@@ -261,8 +255,6 @@ Then, create a branch from the remote branch (e.g. {target-branch}) that contain
 #########
 : "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-# cd "{base-clone-dir}/{ghsa-remote-name}"
-cd "$BASE_CLONE_DIR"/"$GHSA_REMOTE_NAME"
 
 #########
 # Adding the remote and branch
@@ -285,9 +277,6 @@ Edit the codebase (for example the files that implement path validation), run te
 #########
 : "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-# cd "{base-clone-dir}/{ghsa-remote-name}"
-cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
-git switch "$TARGET_BRANCH"
 
 #########
 # Applying the fix
@@ -306,9 +295,6 @@ Push the fix by publishing `TARGET_BRANCH` to the advisory remote so the team ca
 #########
 : "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-# cd "{base-clone-dir}/{ghsa-remote-name}"
-cd "$BASE_CLONE_DIR/$GHSA_REMOTE_NAME"
-git switch "$TARGET_BRANCH"
 
 #########
 # Pushing the fix
