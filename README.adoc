@@ -132,7 +132,7 @@ As the *reporter*, sharing the sample means pushing it to the *private temporary
 
 The steps are:
 
-. <<collaboration-setup,Setup Collaboration>>
+. <<collaboration-setup,Collaboration Setup>>
 . <<sharing-sample-create-branch,Creating the sample branch>>
 . <<sharing-sample-commit,Committing the sample branch>>
 . <<sharing-sample-push,Pushing the sample branch>>
@@ -147,7 +147,7 @@ This section creates an https://git-scm.com/docs/gitglossary#Documentation/gitgl
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -165,7 +165,7 @@ After <<sharing-sample-create-branch,Creating the sample branch>>, copy the exis
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -185,7 +185,7 @@ After <<sharing-sample-commit,Committing the sample branch>>, push branch `sampl
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -205,12 +205,12 @@ As a *team member*, using the sample means checking out branch `sample` from the
 You need access to that fork (for example as a collaborator on the draft advisory).
 
 The script below is *an example* of how you can do that with Git: clone the fork and switch to branch `sample`.
-<<collaboration-setup,Setup Collaboration>> is required before you run this script.
+<<collaboration-setup,Collaboration Setup>> is required before you run this script.
 
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -224,7 +224,7 @@ git switch sample
 This section describes how to *produce a fix* and share it on the private temporary fork.
 The steps are:
 
-. <<collaboration-setup,Setup Collaboration>>
+. <<collaboration-setup,Collaboration Setup>>
 . <<producing-fix-add-remote,Adding the remote and branch>>
 . <<producing-fix-apply-fix,Applying the fix>>
 . <<producing-fix-push,Pushing the fix>>
@@ -241,7 +241,7 @@ Then, create a branch from the remote branch (e.g. {target-branch}) that contain
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -263,7 +263,7 @@ Edit the codebase (for example the files that implement path validation), run te
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
@@ -281,7 +281,7 @@ Push the fix by publishing `TARGET_BRANCH` to the advisory remote so the team ca
 [source,shell,subs=+attributes]
 ----
 #########
-: "${GHSA_SETUP_SCRIPT:?Complete Collaboration Setup first.}"
+: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 
 #########
