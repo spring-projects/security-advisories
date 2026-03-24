@@ -302,7 +302,7 @@ If possible, you should consider updating the `sample` branch to demonstrate the
 For example, you might update the `sample` branch to:
 
 * Align the version of the vulnerable dependency with the fix
-* Have a local Maven repository URL (e.g. Maven Local) and provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install` on the `TARGET_BRANCH` of the private fork).
+* Have a local Maven repository URL (e.g. Maven Local) and provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install` on the fix branch (e.g. `{target-branch}`) of the private fork).
 
 [[examples-of-vulnerabilities]]
 == Examples of Vulnerabilities
