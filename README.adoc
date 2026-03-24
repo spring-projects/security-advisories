@@ -357,6 +357,7 @@ These serve as examples of valid CVEs; we link there rather than duplicate the c
 * <<cve-examples-invalid-unsafe-deserialization>>
 * <<cve-examples-invalid-vulnerabilities-dependencies>>
 * <<cve-examples-invalid-vulnerable-dependency-versions>>
+* <<cve-examples-invalid-unsupported-versions>>
 
 [[cve-examples-invalid-command-injection-via-http-parameters]]
 ==== Command Injection via HTTP Parameters
@@ -414,4 +415,11 @@ If this is made available, the Spring project will be updated to that dependency
 
 Typically, there is not a special release for updating dependency versions.
 Instead, the Spring team encourages developers to override the version until the next Spring release.
+
+[[cve-examples-invalid-unsupported-versions]]
+==== Unsupported Versions
+
+Reports about issues in Spring project versions that have reached end of life are not considered valid CVEs.
+You can find the supported versions on https://spring.io[spring.io].
+For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
 
