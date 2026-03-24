@@ -22,11 +22,11 @@ Collaboration should use a https://docs.github.com/en/code-security/security-adv
 This section outlines how to collaborate on a security advisory and is divided into the following subsections.
 Each subsection describes the goal to achieve and provides example scripts as one way to accomplish it — you are free to use any approach that achieves the same result.
 
-* <<collaboration-example,A Hypothetical CVE Report>>
-* <<collaboration-setup,Collaboration Setup>>
-* <<collaboration-sharing-sample,Sharing the sample>>
-* <<collaboration-using-sample,Using the sample>>
-* <<collaboration-fix,Producing a fix>>
+* <<collaboration-example,A Hypothetical CVE Report>> — introduces the hypothetical CVE used as a running example throughout this section
+* <<collaboration-setup,Collaboration Setup>> — clone the advisory fork locally so subsequent steps can work against it
+* <<collaboration-sharing-sample,Sharing the sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
+* <<collaboration-using-sample,Using the sample>> — check out the reporter's sample locally to run and reproduce the issue
+* <<collaboration-fix,Producing a fix>> — commit a fix and share it on the private fork for team review
 
 
 [[collaboration-example]]
