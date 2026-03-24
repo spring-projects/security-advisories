@@ -160,6 +160,7 @@ The example script below creates the branch and adds an empty initial commit so 
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -180,6 +181,7 @@ The example script below copies the sample directory and commits it.
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -202,6 +204,7 @@ The example script below pushes the branch and prints the GitHub URL.
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -228,6 +231,7 @@ The example script below is one way to achieve that: it switches to branch `samp
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -261,6 +265,7 @@ The example script below adds the public repository as a remote and creates a lo
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -285,6 +290,7 @@ Edit the codebase, run tests or the reporter's reproducer to verify, then stage 
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
@@ -305,6 +311,7 @@ The example script below pushes the branch and prints the GitHub URL.
 [source,shell,subs=+attributes]
 ----
 #########
+# Validate Collaboration Setup was ran
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
 cd "$GHSA_CLONE_DIR"
