@@ -39,7 +39,8 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 === Collaboration Setup
 
 The goal of this step is to clone the advisory fork locally so subsequent steps can work against it.
-It is divided into the following subsections:
+
+We demonstrate how to do perform this with a script that sets <<collaboration-setup-environment,shell variables>> (used later in other example scripts) and then <<collaboration-setup-setup-script,clones the repository>>, but you are free to clone the advisory fork any way you want.
 
 * <<collaboration-setup-environment,Shell Variables>>
 * <<collaboration-setup-setup-script,Setup Script>>
