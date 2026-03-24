@@ -14,7 +14,7 @@ Before creating a report, please read through this document.
 As documented at https://spring.io/security-policy, this repository is used to report security advisories to any Spring Project.
 In particular, read <<cve-examples,What is a Valid CVE?>> before filing a report to confirm your issue qualifies.
 
-[[collaboration]]
+[#collaboration]
 == Collaborating with code
 
 Collaboration should use a https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/collaborating-in-a-temporary-private-fork-to-resolve-a-repository-security-vulnerability[temporary private fork] of this repository.
@@ -29,13 +29,13 @@ Each subsection describes the goal to achieve and provides example scripts as on
 * <<collaboration-fix,Producing a fix>> — commit a fix and share it on the private fork for team review
 
 
-[[collaboration-example]]
+[#collaboration-example]
 === A Hypothetical CVE Report
 
 Throughout this documentation, we will use an example report related to a hypothetical **CVE in Spring Framework related to path validation**.
 For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} and the branch of `{target-branch}`.
 
-[[collaboration-setup]]
+[#collaboration-setup]
 === Collaboration Setup
 
 The goal of this step is to clone the *temporary private fork* locally so subsequent steps can work against it.
@@ -57,7 +57,7 @@ cd $_
 If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
 ====
 
-[[collaboration-sharing-sample]]
+[#collaboration-sharing-sample]
 === Sharing the sample
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
@@ -72,7 +72,7 @@ The following example scripts show one way to achieve that goal:
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
-[[collaboration-sharing-sample-create-branch]]
+[#collaboration-sharing-sample-create-branch]
 ==== Creating the sample branch
 
 The goal is to create an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
@@ -88,7 +88,7 @@ git switch --orphan sample
 git commit --allow-empty -m "Start sample branch"
 ----
 
-[[collaboration-sharing-sample-commit]]
+[#collaboration-sharing-sample-commit]
 ==== Committing the sample branch
 The goal is to have the sample committed on branch `sample`.
 The example script below copies the sample directory and commits it.
@@ -103,7 +103,7 @@ git add -A
 git commit -m "Add sample"
 ----
 
-[[collaboration-sharing-sample-push]]
+[#collaboration-sharing-sample-push]
 ==== Pushing the sample branch
 
 The goal is to have branch `sample` pushed to the advisory remote so reviewers can access it.
@@ -118,7 +118,7 @@ git push -u {ghsa-remote-name} sample
 
 You can now view the sample at https://github.com/{ghsa-name-with-owner}/tree/sample.
 
-[[collaboration-using-sample]]
+[#collaboration-using-sample]
 === Using the sample
 
 As a *team member*, the goal is to have the reporter's sample checked out locally so you can run and reproduce the issue.
@@ -134,7 +134,7 @@ cd {base-clone-dir}/{ghsa-remote-name}
 git switch sample
 ----
 
-[[collaboration-fix]]
+[#collaboration-fix]
 === Producing a fix
 
 The goal of this section is to produce a fix and share it on the private temporary fork for review.
@@ -149,7 +149,7 @@ The following example scripts show one way to achieve that goal:
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
-[[collaboration-fix-add-remote]]
+[#collaboration-fix-add-remote]
 ==== Adding the remote and branch
 
 The goal is to have a local branch tracking the affected branch (e.g. `{target-branch}`) of the public repository (e.g. `{public-name-with-owner}`) so you can apply a fix.
@@ -165,7 +165,7 @@ git fetch {public-repo-remote-name}
 git switch -c {target-branch} {public-repo-remote-name}/{target-branch}
 ----
 
-[[collaboration-fix-apply-fix]]
+[#collaboration-fix-apply-fix]
 ==== Applying the fix
 
 The goal is to have a fix committed on the branch (e.g. `{target-branch}`).
@@ -180,7 +180,7 @@ git add -A
 git commit -m "Fix CVE"
 ----
 
-[[collaboration-fix-push]]
+[#collaboration-fix-push]
 ==== Pushing the fix
 
 The goal is to have the fix branch pushed to the advisory remote so the team can review it on the private fork.
@@ -195,7 +195,7 @@ git push -u {ghsa-remote-name} {target-branch}
 
 You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{target-branch}.
 
-[[collaboration-fix-notify-sample]]
+[#collaboration-fix-notify-sample]
 ==== Notifying the reporter and the `sample` branch
 
 After <<collaboration-fix-push,Pushing the fix>>, notify the reporter and provide instructions for how to review the fix.
@@ -205,20 +205,20 @@ For example, you might update the `sample` branch to:
 * Align the version of the vulnerable dependency with the fix
 * Have a local Maven repository URL (e.g. Maven Local) and provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install` on the fix branch (e.g. `{target-branch}`) of the private fork).
 
-[[cve-examples]]
+[#cve-examples]
 == What is a Valid CVE?
 
 A valid CVE is a security vulnerability directly caused by Spring's own code, where Spring itself allows untrusted input to be processed in an insecure way.
 Issues stemming from developer misuse, vulnerabilities in Spring's dependencies, or transitive dependency versions do not qualify.
 The sections below provide concrete examples of both qualifying and non-qualifying issues.
 
-[[cve-examples-valid]]
+[#cve-examples-valid]
 === Examples of Vulnerabilities
 
 Real accepted Spring security advisories are published at https://spring.io/security/.
 These serve as examples of valid CVEs; we link there rather than duplicate the content here.
 
-[[cve-examples-invalid]]
+[#cve-examples-invalid]
 === Examples of Non-vulnerabilities
 
 * <<cve-examples-invalid-command-injection-via-http-parameters>>
@@ -227,7 +227,7 @@ These serve as examples of valid CVEs; we link there rather than duplicate the c
 * <<cve-examples-invalid-vulnerable-dependency-versions>>
 * <<cve-examples-invalid-unsupported-versions>>
 
-[[cve-examples-invalid-command-injection-via-http-parameters]]
+[#cve-examples-invalid-command-injection-via-http-parameters]
 ==== Command Injection via HTTP Parameters
 
 The following controller is a CVE in the application, not in Spring.
@@ -255,7 +255,7 @@ Spring's role is to route the HTTP request and bind parameters — it has no kno
 The developer is responsible for validating or sanitizing untrusted input before passing it to any sensitive API such as `ProcessBuilder`, `Runtime.exec`, or similar.
 If such a controller is exploited to execute arbitrary commands, the CVE belongs to the application, not to Spring MVC.
 
-[[cve-examples-invalid-unsafe-deserialization]]
+[#cve-examples-invalid-unsafe-deserialization]
 ==== Unsafe Deserialization
 
 The Spring team's stance is that, in order for deserialization to be considered a vulnerability in Spring, Spring must pass data from an untrusted source (that is, HTTP parameters) into a method that performs deserialization in a way that produces a CVE.
@@ -267,12 +267,12 @@ If a developer passes untrusted data from an HTTP request to `ProcessBuilder`, t
 If a developer uses untrusted data to create an SQL query by using String concatenation, it is not a CVE in the SQL driver but in the application for not using prepared SQL statements.
 Similarly, if a developer passes untrusted data into a deserialization method, it is the developer that needs to ensure it is safe to do so.
 
-[[cve-examples-invalid-vulnerabilities-dependencies]]
+[#cve-examples-invalid-vulnerabilities-dependencies]
 ==== Vulnerabilities in Dependencies
 
 Vulnerabilities in Spring's dependencies should be reported to the respective project and not to the Spring team.
 
-[[cve-examples-invalid-vulnerable-dependency-versions]]
+[#cve-examples-invalid-vulnerable-dependency-versions]
 ==== Vulnerable Dependency Versions
 
 The Spring team does its best to keep its dependencies up to date regardless of whether a dependency contains a vulnerability.
@@ -284,7 +284,7 @@ If this is made available, the Spring project will be updated to that dependency
 Typically, there is not a special release for updating dependency versions.
 Instead, the Spring team encourages developers to override the version until the next Spring release.
 
-[[cve-examples-invalid-unsupported-versions]]
+[#cve-examples-invalid-unsupported-versions]
 ==== Unsupported Versions
 
 Reports about issues in Spring project versions that have reached end of life are not considered valid CVEs.
