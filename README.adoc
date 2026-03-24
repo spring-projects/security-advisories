@@ -145,7 +145,7 @@ The following example scripts show one way to achieve that goal:
 . <<collaboration-fix-add-remote,Adding the remote and branch>>
 . <<collaboration-fix-apply-fix,Applying the fix>>
 . <<collaboration-fix-push,Pushing the fix>>
-. <<collaboration-fix-notify-sample,Notifying the reporter and the `sample` branch>>
+. <<collaboration-fix-notify-reporter,Notifying the reporter>>
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
@@ -195,8 +195,8 @@ git push -u {ghsa-remote-name} {target-branch}
 
 You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{target-branch}.
 
-[[collaboration-fix-notify-sample]]
-==== Notifying the reporter and the `sample` branch
+[[collaboration-fix-notify-reporter]]
+==== Notifying the reporter
 
 After <<collaboration-fix-push,Pushing the fix>>, notify the reporter and provide instructions for how to review the fix.
 If possible, you should consider updating the `sample` branch to demonstrate the fix.
