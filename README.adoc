@@ -39,8 +39,10 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 === Collaboration Setup
 
 The goal of this step is to clone the advisory fork locally so subsequent steps can work against it.
-The <<setup-shell-variables,shell variable table>> lists the environment variables you will need to change to match your environment.
+
 The example script below is one way to achieve this — it creates a reusable setup script that exports the walkthrough variables so the subsequent example scripts remain consistent, then clones the advisory fork.
+
+The <<setup-shell-variables,shell variable table>> lists the environment variables you will need to change to match your environment.
 
 [[setup-shell-variables]]
 [cols="1,2",options="header"]
