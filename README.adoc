@@ -12,6 +12,7 @@
 Before creating a report, please read through this document.
 
 As documented at https://spring.io/security-policy, this repository is used to report security advisories to any Spring Project.
+In particular, read <<what-is-a-valid-cve,What is a Valid CVE?>> before filing a report to confirm your issue qualifies.
 
 [[collaborating-with-code]]
 == Collaborating with code
@@ -319,32 +320,36 @@ For example, you might update the `sample` branch to:
 * Align the version of the vulnerable dependency with the fix
 * Have a local Maven repository URL (e.g. Maven Local) and provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install` on the fix branch (e.g. `{target-branch}`) of the private fork).
 
-[[examples-of-vulnerabilities]]
-== Examples of Vulnerabilities
+[[what-is-a-valid-cve]]
+== What is a Valid CVE?
 
-For examples of vulnerabilities, refer to https://spring.io/security/.
+[[examples-of-vulnerabilities]]
+=== Examples of Vulnerabilities
+
+Real accepted Spring security advisories are published at https://spring.io/security/.
+These serve as examples of valid CVEs; we link there rather than duplicate the content here.
 
 [[examples-of-non-vulnerabilities]]
-== Examples of Non-vulnerabilities
+=== Examples of Non-vulnerabilities
 
 * <<deserialization>>
 * <<vulnerable-dependencies>>
 * <<vulnerable-dependency-versions>>
 
 [[deserialization]]
-=== Unsafe Deserialization
+==== Unsafe Deserialization
 
 The Spring team's stance is that, in order for deserialization to be considered a vulnerability in Spring, Spring must pass data from an untrusted source (that is, HTTP parameters) into a method that performs deserialization in a way that produces a CVE. The reason for this stance is that deserialization of arbitrary types is necessary but cannot be made secure.
 
 Spring provides necessary tools for developers, but it is the responsibility of the developer to use them securely. This is no different than any other library or the JDK itself. If a developer passes untrusted data from an HTTP request to `ProcessBuilder`, then it is not a CVE in the JDK but in the application that used `ProcessBuilder` incorrectly. If a developer uses untrusted data to create an SQL query by using String concatenation, it is not a CVE in the SQL driver but in the application for not using prepared SQL statements. Similarly, if a developer passes untrusted data into a deserialization method, it is the developer that needs to ensure it is safe to do so.
 
 [[vulnerable-dependencies]]
-=== Vulnerabilities in Dependencies
+==== Vulnerabilities in Dependencies
 
 Vulnerabilities in Spring's dependencies should be reported to the respective project and not to the Spring team.
 
 [[vulnerable-dependency-versions]]
-=== Vulnerable Dependency Versions
+==== Vulnerable Dependency Versions
 
 The Spring team does its best to keep its dependencies up to date regardless of whether a dependency contains a vulnerability. However, we do not consider it a vulnerability in Spring when Spring defines a vulnerable dependency version, because developers can override these versions and because releasing for any transitive dependency would become unmanageable for the Spring portfolio.
 
