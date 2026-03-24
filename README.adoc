@@ -1,9 +1,9 @@
 = Spring Security Policy
-// See A Hypothetical CVE Report for attributes; Collaboration Setup writes {ghsa-remote-name}-setup.sh under {base-clone-dir}.
+// See A Hypothetical CVE Report for attribute descriptions.
 :ghsa-name-with-owner: spring-projects/security-advisories-ghsa-3rf2-292v-g6wr
 :ghsa-remote-name: ghsa-path-validation
-:base-clone-dir: $HOME/code/spring-projects/security-advisories
-:cve-sample-dir: $HOME/code/rwinch/spring-sample/main/
+:base-clone-dir: ~/code
+:cve-sample-dir: ~/code/sample-cve
 :public-name-with-owner: spring-projects/spring-framework
 :public-repo-remote-name: spring-framework
 :target-branch: 7.0.x
@@ -40,102 +40,21 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 
 The goal of this step is to clone the advisory fork locally so subsequent steps can work against it.
 
-We demonstrate how to do perform this with a script that sets <<collaboration-setup-environment,shell variables>> (used later in other example scripts) and then <<collaboration-setup-setup-script,clones the repository>>, but you are free to clone the advisory fork any way you want.
+The example script below clones the advisory fork, but you are free to clone the advisory fork any way you want.
 
-* <<collaboration-setup-environment,Shell Variables>>
-* <<collaboration-setup-setup-script,Setup Script>>
-
-[[collaboration-setup-environment]]
-==== Shell Variables
-
-The following table lists the environment variables you will need to change to match your environment.
-
-[cols="1,2",options="header"]
-|===
-|Shell variable |Role
-
-|`GHSA_NAME_WITH_OWNER` |Advisory fork `owner/repo` (e.g. `{ghsa-name-with-owner}`) used to derive the URL to clone the advisory fork (e.g. `git@github.com:{ghsa-name-with-owner}.git`).
-
-|`BASE_CLONE_DIR` |Parent directory for clones (e.g. `{base-clone-dir}`).
-
-|`GHSA_REMOTE_NAME` |The directory to clone into and the remote name for the clone (e.g. `{ghsa-remote-name}`).
-
-|`CVE_SAMPLE_DIR` |Where the existing sample directory should be copied from (e.g. `{cve-sample-dir}`) into the private temporary fork clone.
-
-|`PUBLIC_NAME_WITH_OWNER` |Public repository `owner/repo` (e.g. `{public-name-with-owner}`) used to derive the remote to clone the repository with the CVE in it (e.g. `https://github.com/{public-name-with-owner}.git`)
-
-|`PUBLIC_REPO_REMOTE_NAME` |The remote name used for the public repository (e.g. `{public-repo-remote-name}`).
-
-|`TARGET_BRANCH` |Branch name with the CVE in it (e.g. `{target-branch}`).
-
-|===
+[source,shell,subs=+attributes]
+----
+mkdir -p {base-clone-dir}
+# Ensure you are in the right working directory
+cd {base-clone-dir}
+# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
+git clone -o {ghsa-remote-name} git@github.com:{ghsa-name-with-owner}.git {ghsa-remote-name}
+----
 
 [NOTE]
 ====
 If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
-After you change defaults, run <<collaboration-setup-setup-script,Setup Script>> again so `{base-clone-dir}/{ghsa-remote-name}-setup.sh` is regenerated.
 ====
-
-[[collaboration-setup-setup-script]]
-==== Setup Script
-
-The script below creates a reusable setup file that exports the <<collaboration-setup-environment,shell variables>> so the subsequent example scripts remain consistent, then clones the advisory fork and sets the working directory to the clone.
-Before running the script, update it below according to the <<collaboration-setup-environment,shell variables>> descriptions.
-
-[source,shell,subs=+attributes]
-----
-# Advisory walkthrough defaults — re-create via Collaboration Setup when document attributes change.
-GHSA_NAME_WITH_OWNER="{ghsa-name-with-owner}"
-GHSA_REMOTE_NAME="{ghsa-remote-name}"
-BASE_CLONE_DIR="{base-clone-dir}"
-##
-# Only needed for the reporter sharing the sample
-CVE_SAMPLE_DIR="{cve-sample-dir}"
-##
-# Only needed for the team member fixing
-PUBLIC_NAME_WITH_OWNER="{public-name-with-owner}"
-PUBLIC_REPO_REMOTE_NAME="{public-repo-remote-name}"
-TARGET_BRANCH="{target-branch}"
-
-#######
-# Unlikely to need editing below this line
-#######
-GHSA_SETUP_SCRIPT="${BASE_CLONE_DIR}/${GHSA_REMOTE_NAME}-setup.sh"
-mkdir -p "$BASE_CLONE_DIR"
-cat > "$GHSA_SETUP_SCRIPT" <<ENDADVISORYSETUP
-#!/usr/bin/env bash
-# Advisory walkthrough defaults — re-create via Collaboration Setup when document attributes change.
-export GHSA_NAME_WITH_OWNER="$\{GHSA_NAME_WITH_OWNER}"
-export GHSA_REMOTE_NAME="$\{GHSA_REMOTE_NAME}"
-export BASE_CLONE_DIR="$\{BASE_CLONE_DIR}"
-##
-# Only needed for the reporter sharing the sample
-export CVE_SAMPLE_DIR="$\{CVE_SAMPLE_DIR}"
-##
-# Only needed for the team member fixing
-export PUBLIC_NAME_WITH_OWNER="$\{PUBLIC_NAME_WITH_OWNER}"
-export PUBLIC_REPO_REMOTE_NAME="$\{PUBLIC_REPO_REMOTE_NAME}"
-export TARGET_BRANCH="$\{TARGET_BRANCH}"
-
-#######
-# Unlikely to need editing below this line
-#######
-export GHSA_REMOTE_URL="git@github.com:$\{GHSA_NAME_WITH_OWNER}.git"
-export GHSA_SETUP_SCRIPT="$\{GHSA_SETUP_SCRIPT}"
-export GHSA_CLONE_DIR="$\{BASE_CLONE_DIR}/$\{GHSA_REMOTE_NAME}"
-ENDADVISORYSETUP
-chmod +x "$GHSA_SETUP_SCRIPT"
-source "$GHSA_SETUP_SCRIPT"
-# mkdir -p "{base-clone-dir}"
-# cd "{base-clone-dir}"
-cd "$BASE_CLONE_DIR"
-# Clone the advisory fork into directory {ghsa-remote-name}
-# -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
-# git clone -o "{ghsa-remote-name}" "git@github.com:{ghsa-name-with-owner}.git" "{ghsa-remote-name}"
-git clone -o "$GHSA_REMOTE_NAME" "$GHSA_REMOTE_URL" "$GHSA_REMOTE_NAME"
-# cd "{ghsa-remote-name}"
-cd "$GHSA_REMOTE_NAME"
-----
 
 [[collaboration-sharing-sample]]
 === Sharing the sample
@@ -160,14 +79,8 @@ The example script below creates the branch and adds an empty initial commit so 
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Creating the sample branch
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
 # git switch requires Git 2.23+ (--orphan removes tracked files from the working tree).
 git switch --orphan sample
 # Empty commit so refs/heads/sample exists (otherwise checkout/switch sample fails later or in a new shell).
@@ -181,17 +94,10 @@ The example script below copies the sample directory and commits it.
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Committing the sample branch
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
 # rsync copies the sample without bringing over `.git` (or any nested `.git` directories).
-# rsync -a --exclude='.git' "{cve-sample-dir}"/ .
-rsync -a --exclude='.git' "$CVE_SAMPLE_DIR"/ .
+rsync -a --exclude=.git {cve-sample-dir}/ .
 git add -A
 git commit -m "Add sample"
 ----
@@ -204,18 +110,9 @@ The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Pushing the sample branch
-# git push -u "{ghsa-remote-name}" sample
-git push -u "$GHSA_REMOTE_NAME" sample
-# echo View the sample at https://github.com/{ghsa-name-with-owner}/tree/sample
-echo "View the sample at https://github.com/${GHSA_NAME_WITH_OWNER}/tree/sample"
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
+git push -u {ghsa-remote-name} sample
 ----
 
 You can now view the sample at https://github.com/{ghsa-name-with-owner}/tree/sample.
@@ -231,14 +128,8 @@ The example script below is one way to achieve that: it switches to branch `samp
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Using the sample
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
 git switch sample
 ----
 
@@ -265,21 +156,12 @@ The example script below adds the public repository as a remote and creates a lo
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Adding the remote and branch
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
 # HTTPS URL and a dedicated remote alias reduce the chance of pushing to the wrong GitHub repository.
-# git remote add "{public-repo-remote-name}" "https://github.com/{public-name-with-owner}.git"
-git remote add "$PUBLIC_REPO_REMOTE_NAME" "https://github.com/${PUBLIC_NAME_WITH_OWNER}.git"
-# git fetch "{public-repo-remote-name}"
-git fetch "$PUBLIC_REPO_REMOTE_NAME"
-# git switch -c "{target-branch}" "{public-repo-remote-name}/{target-branch}"
-git switch -c "$TARGET_BRANCH" "$PUBLIC_REPO_REMOTE_NAME/$TARGET_BRANCH"
+git remote add {public-repo-remote-name} https://github.com/{public-name-with-owner}.git
+git fetch {public-repo-remote-name}
+git switch -c {target-branch} {public-repo-remote-name}/{target-branch}
 ----
 
 [[collaboration-fix-apply-fix]]
@@ -290,14 +172,8 @@ Edit the codebase, run tests or the reporter's reproducer to verify, then stage 
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Applying the fix
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
 # Edit sources as needed, then stage and commit.
 git add -A
 git commit -m "Fix CVE"
@@ -311,18 +187,9 @@ The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
-#########
-# Validate Collaboration Setup was ran
-: "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
-source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
-cd "$GHSA_CLONE_DIR"
-
-#########
-# Pushing the fix
-# git push -u "{ghsa-remote-name}" "{target-branch}"
-git push -u "$GHSA_REMOTE_NAME" "$TARGET_BRANCH"
-# echo Fix branch (HTTPS): https://github.com/{ghsa-name-with-owner}/tree/{target-branch}
-echo "Fix branch (HTTPS): https://github.com/${GHSA_NAME_WITH_OWNER}/tree/${TARGET_BRANCH}"
+# Ensure you are in the right working directory
+cd {base-clone-dir}/{ghsa-remote-name}
+git push -u {ghsa-remote-name} {target-branch}
 ----
 
 You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{target-branch}.
