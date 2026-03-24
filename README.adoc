@@ -59,6 +59,7 @@ The <<setup-shell-variables,shell variable table>> lists each variable and what 
 |`TARGET_BRANCH` |Branch name with the CVE in it (e.g. `{target-branch}`).
 
 |`GHSA_SETUP_SCRIPT` |Absolute path to the generated setup script (e.g. `{base-clone-dir}/{ghsa-remote-name}-setup.sh`). Later steps `source` this file to load the exports.
+
 |===
 
 [NOTE]
@@ -110,6 +111,7 @@ export TARGET_BRANCH="$\{TARGET_BRANCH}"
 #######
 export GHSA_REMOTE_URL="git@github.com:$\{GHSA_NAME_WITH_OWNER}.git"
 export GHSA_SETUP_SCRIPT="$\{GHSA_SETUP_SCRIPT}"
+export GHSA_CLONE_DIR="$\{BASE_CLONE_DIR}/$\{GHSA_REMOTE_NAME}"
 ENDADVISORYSETUP
 chmod +x "$GHSA_SETUP_SCRIPT"
 source "$GHSA_SETUP_SCRIPT"
@@ -149,6 +151,7 @@ This section creates an https://git-scm.com/docs/gitglossary#Documentation/gitgl
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Creating the sample branch
@@ -167,6 +170,7 @@ After <<sharing-sample-create-branch,Creating the sample branch>>, copy the exis
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Committing the sample branch
@@ -187,6 +191,7 @@ After <<sharing-sample-commit,Committing the sample branch>>, push branch `sampl
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Pushing the sample branch
@@ -212,6 +217,7 @@ The script below is *an example* of how you can do that with Git: clone the fork
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Using the sample
@@ -243,6 +249,7 @@ Then, create a branch from the remote branch (e.g. {target-branch}) that contain
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Adding the remote and branch
@@ -265,6 +272,7 @@ Edit the codebase (for example the files that implement path validation), run te
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Applying the fix
@@ -283,6 +291,7 @@ Push the fix by publishing `TARGET_BRANCH` to the advisory remote so the team ca
 #########
 : "${GHSA_SETUP_SCRIPT:?Run Collaboration Setup first.}"
 source "$GHSA_SETUP_SCRIPT" || { echo >&2 "Failed to source $GHSA_SETUP_SCRIPT"; exit 1; }
+cd "$GHSA_CLONE_DIR"
 
 #########
 # Pushing the fix
