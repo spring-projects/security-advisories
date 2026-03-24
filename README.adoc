@@ -73,17 +73,17 @@ Before running the script, update it below according to <<setup-shell-variables,
 [source,shell,subs=+attributes]
 ----
 # Advisory walkthrough defaults — re-create via Collaboration Setup when document attributes change.
-GHSA_NAME_WITH_OWNER='{ghsa-name-with-owner}'
-GHSA_REMOTE_NAME='{ghsa-remote-name}'
+GHSA_NAME_WITH_OWNER="{ghsa-name-with-owner}"
+GHSA_REMOTE_NAME="{ghsa-remote-name}"
 BASE_CLONE_DIR="{base-clone-dir}"
 ##
 # Only needed for the reporter sharing the sample
-CVE_SAMPLE_DIR='{cve-sample-dir}'
+CVE_SAMPLE_DIR="{cve-sample-dir}"
 ##
 # Only needed for the team member fixing
-PUBLIC_NAME_WITH_OWNER='{public-name-with-owner}'
-PUBLIC_REPO_REMOTE_NAME='{public-repo-remote-name}'
-TARGET_BRANCH='{target-branch}'
+PUBLIC_NAME_WITH_OWNER="{public-name-with-owner}"
+PUBLIC_REPO_REMOTE_NAME="{public-repo-remote-name}"
+TARGET_BRANCH="{target-branch}"
 
 #######
 # Unlikely to need editing below this line
