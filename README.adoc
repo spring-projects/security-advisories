@@ -17,7 +17,8 @@ As documented at https://spring.io/security-policy, this repository is used to r
 
 Collaboration should use a https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/collaborating-in-a-temporary-private-fork-to-resolve-a-repository-security-vulnerability[temporary private fork] of this repository.
 
-This section outlines how to collaborate on a security advisory and is divided into the following subsections:
+This section outlines how to collaborate on a security advisory and is divided into the following subsections.
+Each subsection describes the goal to achieve and provides example scripts as one way to accomplish it — you are free to use any approach that achieves the same result.
 
 * <<hypothetical-cve-report,A Hypothetical CVE Report>>
 * <<collaboration-setup,Collaboration Setup>>
@@ -35,9 +36,9 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 [[collaboration-setup]]
 === Collaboration Setup
 
-Before you start, you need to set up the environment for <<collaborating-with-code,Collaborating with code>>.
-To do this, you will need to create a setup script that will be used to set up the environment (environment variables, clone the repository, and set the working directory) for the rest of the steps.
+The goal of this step is to clone the advisory fork locally so subsequent steps can work against it.
 The <<setup-shell-variables,shell variable table>> lists the environment variables you will need to change to match your environment.
+The example script below is one way to achieve this — it creates a reusable setup script that exports the walkthrough variables so the subsequent example scripts remain consistent, then clones the advisory fork.
 
 [[setup-shell-variables]]
 [cols="1,2",options="header"]
@@ -128,21 +129,22 @@ cd "$GHSA_REMOTE_NAME"
 === Sharing the sample
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
-As the *reporter*, sharing the sample means pushing it to the *private temporary fork* for that advisory on a branch named `sample`, so the team can review it without publishing to the public repository or a public issue.
+As the *reporter*, the goal is to push your sample to an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the *private temporary fork* so the team can review it without publishing to the public repository or a public issue.
 
-The steps are:
+The following example scripts show one way to achieve that goal:
 
 . <<collaboration-setup,Collaboration Setup>>
 . <<sharing-sample-create-branch,Creating the sample branch>>
 . <<sharing-sample-commit,Committing the sample branch>>
 . <<sharing-sample-push,Pushing the sample branch>>
 
-Review each block before you run it, align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment, and complete <<collaboration-setup,Collaboration Setup>> once so the setup script exists.
+Review each block before you run it and align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment.
 
 [[sharing-sample-create-branch]]
 ==== Creating the sample branch
 
-This section creates an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
+The goal is to create an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
+The example script below creates the branch and adds an empty initial commit so the ref exists for subsequent steps.
 
 [source,shell,subs=+attributes]
 ----
@@ -161,7 +163,8 @@ git commit --allow-empty -m "Start sample branch"
 
 [[sharing-sample-commit]]
 ==== Committing the sample branch
-After <<sharing-sample-create-branch,Creating the sample branch>>, copy the existing sample directory to the `sample` branch and commit the changes.
+The goal is to have the sample committed on branch `sample`.
+The example script below copies the sample directory and commits it.
 
 [source,shell,subs=+attributes]
 ----
@@ -182,7 +185,8 @@ git commit -m "Add sample"
 [[sharing-sample-push]]
 ==== Pushing the sample branch
 
-After <<sharing-sample-commit,Committing the sample branch>>, push branch `sample` to the advisory remote and print the GitHub URL for reviewers.
+The goal is to have branch `sample` pushed to the advisory remote so reviewers can access it.
+The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
@@ -204,11 +208,11 @@ You can now view the sample at https://github.com/{ghsa-name-with-owner}/tree/sa
 [[using-sample]]
 === Using the sample
 
-As a *team member*, using the sample means checking out branch `sample` from the *private temporary fork* for that advisory so you have the reporter's reproducer locally, then following their run and reproduce instructions (for example in the project tree or advisory notes).
-You need access to that fork (for example as a collaborator on the draft advisory).
+As a *team member*, the goal is to have the reporter's sample checked out locally so you can run and reproduce the issue.
+You need access to the private temporary fork (for example as a collaborator on the draft advisory).
 
-The script below is *an example* of how you can do that with Git: clone the fork and switch to branch `sample`.
-<<collaboration-setup,Collaboration Setup>> is required before you run this script.
+The example script below is one way to achieve that: it switches to branch `sample` in the fork clone.
+<<collaboration-setup,Collaboration Setup>> must be completed first so the clone exists.
 
 [source,shell,subs=+attributes]
 ----
@@ -225,8 +229,9 @@ git switch sample
 [[producing-fix]]
 === Producing a fix
 
-This section describes how to *produce a fix* and share it on the private temporary fork.
-The steps are:
+The goal of this section is to produce a fix and share it on the private temporary fork for review.
+
+The following example scripts show one way to achieve that goal:
 
 . <<collaboration-setup,Collaboration Setup>>
 . <<producing-fix-add-remote,Adding the remote and branch>>
@@ -234,13 +239,13 @@ The steps are:
 . <<producing-fix-push,Pushing the fix>>
 . <<producing-fix-notify-sample,Notifying the reporter and the `sample` branch>>
 
-Review each block before you run it, align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment, and complete <<collaboration-setup,Collaboration Setup>> once so the setup script exists.
+Review each block before you run it and align the defaults in <<hypothetical-cve-report,A Hypothetical CVE Report>> with your environment.
 
 [[producing-fix-add-remote]]
 ==== Adding the remote and branch
 
-First, add the remote of the impacted repository (e.g. {public-name-with-owner}) to the private temporary fork clone.
-Then, create a branch from the remote branch (e.g. {target-branch}) that contains the CVE.
+The goal is to have a local branch tracking the affected branch (e.g. `{target-branch}`) of the public repository (e.g. `{public-name-with-owner}`) so you can apply a fix.
+The example script below adds the public repository as a remote and creates a local branch from it.
 
 [source,shell,subs=+attributes]
 ----
@@ -263,7 +268,8 @@ git switch -c "$TARGET_BRANCH" "$PUBLIC_REPO_REMOTE_NAME/$TARGET_BRANCH"
 [[producing-fix-apply-fix]]
 ==== Applying the fix
 
-Edit the codebase (for example the files that implement path validation), run tests or the reporter’s reproducer, then stage and commit on `TARGET_BRANCH`.
+The goal is to have a fix committed on the branch (e.g. `{target-branch}`).
+Edit the codebase, run tests or the reporter's reproducer to verify, then stage and commit — the example script below shows the commit step.
 
 [source,shell,subs=+attributes]
 ----
@@ -282,7 +288,8 @@ git commit -m "Fix CVE"
 [[producing-fix-push]]
 ==== Pushing the fix
 
-Push the fix by publishing `TARGET_BRANCH` to the advisory remote so the team can review it on the private fork.
+The goal is to have the fix branch pushed to the advisory remote so the team can review it on the private fork.
+The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
