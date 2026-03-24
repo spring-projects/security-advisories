@@ -39,12 +39,16 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 === Collaboration Setup
 
 The goal of this step is to clone the advisory fork locally so subsequent steps can work against it.
+It is divided into the following subsections:
 
-The example script below is one way to achieve this — it creates a reusable setup script that exports the walkthrough variables so the subsequent example scripts remain consistent, then clones the advisory fork.
-
-The <<setup-shell-variables,shell variable table>> lists the environment variables you will need to change to match your environment.
+* <<setup-shell-variables,Shell Variables>>
+* <<setup-script,Setup Script>>
 
 [[setup-shell-variables]]
+==== Shell Variables
+
+The following table lists the environment variables you will need to change to match your environment.
+
 [cols="1,2",options="header"]
 |===
 |Shell variable |Role
@@ -68,11 +72,14 @@ The <<setup-shell-variables,shell variable table>> lists the environment variabl
 [NOTE]
 ====
 If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
-After you change defaults, run <<collaboration-setup,Collaboration Setup>> again so `{base-clone-dir}/{ghsa-remote-name}-setup.sh` is regenerated.
+After you change defaults, run <<setup-script,Setup Script>> again so `{base-clone-dir}/{ghsa-remote-name}-setup.sh` is regenerated.
 ====
 
-The script below will create the variables used throughout the rest of the documentation and it will clone the advisory fork and set the working directory to the clone.
-Before running the script, update it below according to <<setup-shell-variables,the shell variables>> descriptions.
+[[setup-script]]
+==== Setup Script
+
+The script below creates a reusable setup file that exports the <<setup-shell-variables,shell variables>> so the subsequent example scripts remain consistent, then clones the advisory fork and sets the working directory to the clone.
+Before running the script, update it below according to the <<setup-shell-variables,shell variables>> descriptions.
 
 [source,shell,subs=+attributes]
 ----
