@@ -323,6 +323,10 @@ For example, you might update the `sample` branch to:
 [[what-is-a-valid-cve]]
 == What is a Valid CVE?
 
+A valid CVE is a security vulnerability directly caused by Spring's own code, where Spring itself processes untrusted input in an insecure way.
+Issues stemming from developer misuse, vulnerabilities in Spring's dependencies, or transitive dependency versions do not qualify.
+The sections below provide concrete examples of both qualifying and non-qualifying issues.
+
 [[examples-of-vulnerabilities]]
 === Examples of Vulnerabilities
 
