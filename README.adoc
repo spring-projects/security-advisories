@@ -37,7 +37,7 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 
 Before you start, you need to set up the environment for <<collaborating-with-code,Collaborating with code>>.
 To do this, you will need to create a setup script that will be used to set up the environment (environment variables, clone the repository, and set the working directory) for the rest of the steps.
-The <<setup-shell-variables,shell variable table>> lists each variable and what it is for.
+The <<setup-shell-variables,shell variable table>> lists the environment variables you will need to change to match your environment.
 
 [[setup-shell-variables]]
 [cols="1,2",options="header"]
@@ -57,8 +57,6 @@ The <<setup-shell-variables,shell variable table>> lists each variable and what 
 |`PUBLIC_REPO_REMOTE_NAME` |The remote name used for the public repository (e.g. `{public-repo-remote-name}`).
 
 |`TARGET_BRANCH` |Branch name with the CVE in it (e.g. `{target-branch}`).
-
-|`GHSA_SETUP_SCRIPT` |Absolute path to the generated setup script (e.g. `{base-clone-dir}/{ghsa-remote-name}-setup.sh`). Later steps `source` this file to load the exports.
 
 |===
 
