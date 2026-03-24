@@ -44,11 +44,9 @@ The example script below clones the advisory fork, but you are free to clone the
 
 [source,shell,subs=+attributes]
 ----
-mkdir -p {base-clone-dir}
-# Ensure you are in the right working directory
-cd {base-clone-dir}
 # -o uses a uniquely named remote (instead of origin) to avoid accidentally pushing to the wrong repository.
-git clone -o {ghsa-remote-name} git@github.com:{ghsa-name-with-owner}.git {ghsa-remote-name}
+git clone -o {ghsa-remote-name} git@github.com:{ghsa-name-with-owner}.git {base-clone-dir}/{ghsa-remote-name}
+cd $_
 ----
 
 [NOTE]
