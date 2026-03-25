@@ -14,6 +14,92 @@ Before creating a report, please read through this document.
 As documented at https://spring.io/security-policy, this repository is used to report security advisories to any Spring Project.
 In particular, read <<cve-examples,What is a Valid CVE?>> before filing a report to confirm your issue qualifies.
 
+[[cve-examples]]
+== What is a Valid CVE?
+
+A valid CVE is a security vulnerability directly caused by Spring's own code, where Spring itself allows untrusted input to be processed in an insecure way.
+Issues stemming from developer misuse, vulnerabilities in Spring's dependencies, or transitive dependency versions do not qualify.
+The sections below provide concrete examples of both qualifying and non-qualifying issues.
+
+[[cve-examples-valid]]
+=== Examples of Vulnerabilities
+
+Real accepted Spring security advisories are published at https://spring.io/security/.
+These serve as examples of valid CVEs; we link there rather than duplicate the content here.
+
+[[cve-examples-invalid]]
+=== Examples of Non-Vulnerabilities
+
+* <<cve-examples-invalid-insecure-application-code>>
+* <<cve-examples-invalid-unsafe-deserialization>>
+* <<cve-examples-invalid-vulnerabilities-dependencies>>
+* <<cve-examples-invalid-vulnerable-dependency-versions>>
+* <<cve-examples-invalid-unsupported-versions>>
+
+[[cve-examples-invalid-insecure-application-code]]
+==== Insecure Application Code
+
+The following controller is a CVE in the application, not in Spring.
+
+[source,java]
+----
+@RestController
+class HasCveCommandController {
+
+    /**
+     * CVE: passes the untrusted {@code command} HTTP parameter directly to
+     * {@link ProcessBuilder}, allowing an attacker to execute arbitrary commands
+     * on the server. This is a vulnerability in the application, not in Spring.
+     */
+    @GetMapping("/cve")
+    String cve(@RequestParam String command) throws Exception {
+        Process process = new ProcessBuilder(command).start();
+        return new String(process.getInputStream().readAllBytes());
+    }
+
+}
+----
+
+Spring's role is to route the HTTP request and bind parameters — it has no knowledge of, or responsibility for, what the developer does with those values.
+The developer is responsible for validating or sanitizing untrusted input before passing it to any sensitive API such as `ProcessBuilder`, `Runtime.exec`, or similar.
+If such a controller is exploited to execute arbitrary commands, the CVE belongs to the application, not to Spring MVC.
+
+[[cve-examples-invalid-unsafe-deserialization]]
+==== Unsafe Deserialization
+
+The Spring team's stance is that, in order for deserialization to be considered a vulnerability in Spring, Spring must pass data from an untrusted source (that is, HTTP parameters) into a method that performs deserialization in a way that produces a CVE.
+The reason for this stance is that deserialization of arbitrary types is necessary but cannot be made secure.
+
+Spring provides necessary tools for developers, but it is the responsibility of the developer to use them securely.
+This is no different than any other library or the JDK itself.
+If a developer passes untrusted data from an HTTP request to `ProcessBuilder`, then it is not a CVE in the JDK but in the <<cve-examples-invalid-insecure-application-code,application that used `ProcessBuilder` incorrectly>>.
+If a developer uses untrusted data to create an SQL query by using String concatenation, it is not a CVE in the SQL driver but in the application for not using prepared SQL statements.
+Similarly, if a developer passes untrusted data into a deserialization method, it is the developer that needs to ensure it is safe to do so.
+
+[[cve-examples-invalid-vulnerabilities-dependencies]]
+==== Vulnerabilities in Dependencies
+
+Vulnerabilities in Spring's dependencies should be reported to the respective project and not to the Spring team.
+
+[[cve-examples-invalid-vulnerable-dependency-versions]]
+==== Vulnerable Dependency Versions
+
+The Spring team does its best to keep its dependencies up to date regardless of whether a dependency contains a vulnerability.
+However, we do not consider it a vulnerability in Spring when Spring defines a vulnerable dependency version, because developers can override these versions and because releasing for any transitive dependency would become unmanageable for the Spring portfolio.
+
+It is up to the developer of the dependency to release a compatible version with the security fix.
+If this is made available, the Spring project will be updated to that dependency version prior to releasing the next version of the Spring project.
+
+Typically, there is not a special release for updating dependency versions.
+Instead, the Spring team encourages developers to override the version until the next Spring release.
+
+[[cve-examples-invalid-unsupported-versions]]
+==== Unsupported Versions
+
+Reports about issues in Spring project versions that have reached end of life are not considered valid CVEs.
+You can find the supported versions on https://spring.io[spring.io].
+For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
+
 [[collaboration]]
 == Collaborating with Code
 
@@ -208,90 +294,3 @@ For example, you might update the `sample` branch to:
 * Align the version of the vulnerable dependency with the fix
 * If necessary, add a local Maven repository URL (e.g. Maven Local)
 * Provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install`) on the fix branch (e.g. `{target-branch}`) of the private fork
-
-[[cve-examples]]
-== What is a Valid CVE?
-
-A valid CVE is a security vulnerability directly caused by Spring's own code, where Spring itself allows untrusted input to be processed in an insecure way.
-Issues stemming from developer misuse, vulnerabilities in Spring's dependencies, or transitive dependency versions do not qualify.
-The sections below provide concrete examples of both qualifying and non-qualifying issues.
-
-[[cve-examples-valid]]
-=== Examples of Vulnerabilities
-
-Real accepted Spring security advisories are published at https://spring.io/security/.
-These serve as examples of valid CVEs; we link there rather than duplicate the content here.
-
-[[cve-examples-invalid]]
-=== Examples of Non-Vulnerabilities
-
-* <<cve-examples-invalid-insecure-application-code>>
-* <<cve-examples-invalid-unsafe-deserialization>>
-* <<cve-examples-invalid-vulnerabilities-dependencies>>
-* <<cve-examples-invalid-vulnerable-dependency-versions>>
-* <<cve-examples-invalid-unsupported-versions>>
-
-[[cve-examples-invalid-insecure-application-code]]
-==== Insecure Application Code
-
-The following controller is a CVE in the application, not in Spring.
-
-[source,java]
-----
-@RestController
-class HasCveCommandController {
-
-    /**
-     * CVE: passes the untrusted {@code command} HTTP parameter directly to
-     * {@link ProcessBuilder}, allowing an attacker to execute arbitrary commands
-     * on the server. This is a vulnerability in the application, not in Spring.
-     */
-    @GetMapping("/cve")
-    String cve(@RequestParam String command) throws Exception {
-        Process process = new ProcessBuilder(command).start();
-        return new String(process.getInputStream().readAllBytes());
-    }
-
-}
-----
-
-Spring's role is to route the HTTP request and bind parameters — it has no knowledge of, or responsibility for, what the developer does with those values.
-The developer is responsible for validating or sanitizing untrusted input before passing it to any sensitive API such as `ProcessBuilder`, `Runtime.exec`, or similar.
-If such a controller is exploited to execute arbitrary commands, the CVE belongs to the application, not to Spring MVC.
-
-[[cve-examples-invalid-unsafe-deserialization]]
-==== Unsafe Deserialization
-
-The Spring team's stance is that, in order for deserialization to be considered a vulnerability in Spring, Spring must pass data from an untrusted source (that is, HTTP parameters) into a method that performs deserialization in a way that produces a CVE.
-The reason for this stance is that deserialization of arbitrary types is necessary but cannot be made secure.
-
-Spring provides necessary tools for developers, but it is the responsibility of the developer to use them securely.
-This is no different than any other library or the JDK itself.
-If a developer passes untrusted data from an HTTP request to `ProcessBuilder`, then it is not a CVE in the JDK but in the <<cve-examples-invalid-insecure-application-code,application that used `ProcessBuilder` incorrectly>>.
-If a developer uses untrusted data to create an SQL query by using String concatenation, it is not a CVE in the SQL driver but in the application for not using prepared SQL statements.
-Similarly, if a developer passes untrusted data into a deserialization method, it is the developer that needs to ensure it is safe to do so.
-
-[[cve-examples-invalid-vulnerabilities-dependencies]]
-==== Vulnerabilities in Dependencies
-
-Vulnerabilities in Spring's dependencies should be reported to the respective project and not to the Spring team.
-
-[[cve-examples-invalid-vulnerable-dependency-versions]]
-==== Vulnerable Dependency Versions
-
-The Spring team does its best to keep its dependencies up to date regardless of whether a dependency contains a vulnerability.
-However, we do not consider it a vulnerability in Spring when Spring defines a vulnerable dependency version, because developers can override these versions and because releasing for any transitive dependency would become unmanageable for the Spring portfolio.
-
-It is up to the developer of the dependency to release a compatible version with the security fix.
-If this is made available, the Spring project will be updated to that dependency version prior to releasing the next version of the Spring project.
-
-Typically, there is not a special release for updating dependency versions.
-Instead, the Spring team encourages developers to override the version until the next Spring release.
-
-[[cve-examples-invalid-unsupported-versions]]
-==== Unsupported Versions
-
-Reports about issues in Spring project versions that have reached end of life are not considered valid CVEs.
-You can find the supported versions on https://spring.io[spring.io].
-For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
-
