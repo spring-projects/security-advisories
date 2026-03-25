@@ -62,6 +62,7 @@ If you want to update the instructions throughout this documentation, you can up
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
 As the *reporter*, the goal is to push your sample to an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the *private temporary fork* so the team can review it without publishing to the public repository or a public issue.
+<<collaboration-setup,Collaboration Setup>> must be completed first so the clone of the private temporary fork exists.
 
 The following example scripts show one way to achieve that goal:
 
