@@ -82,7 +82,7 @@ The example script below creates the branch and adds an empty initial commit so 
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 # git switch requires Git 2.23+ (--orphan removes tracked files from the working tree).
 git switch --orphan sample
@@ -97,7 +97,7 @@ The example script below copies the sample directory and commits it.
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 # rsync copies the sample without bringing over `.git` (or any nested `.git` directories).
 rsync -a --exclude=.git {cve-sample-dir}/ .
@@ -113,7 +113,7 @@ The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 git push -u {ghsa-remote-name} sample
 ----
@@ -131,7 +131,7 @@ The example script below is one way to achieve that: it switches to branch `samp
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 git switch sample
 ----
@@ -159,7 +159,7 @@ The example script below adds the public repository as a remote and creates a lo
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 # HTTPS URL and a dedicated remote alias reduce the chance of pushing to the wrong GitHub repository.
 git remote add {public-repo-remote-name} https://github.com/{public-name-with-owner}.git
@@ -175,7 +175,7 @@ Edit the codebase, run tests or the reporter's reproducer to verify, then stage 
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 # Edit sources as needed, then stage and commit.
 git add -A
@@ -190,7 +190,7 @@ The example script below pushes the branch and prints the GitHub URL.
 
 [source,shell,subs=+attributes]
 ----
-# Ensure you are in the right working directory
+# Ensure in the clone directory
 cd {base-clone-dir}/{ghsa-remote-name}
 git push -u {ghsa-remote-name} {target-branch}
 ----
