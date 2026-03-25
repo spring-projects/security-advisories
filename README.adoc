@@ -24,7 +24,7 @@ Each subsection describes the goal to achieve and provides example scripts as on
 
 * <<collaboration-example,A Hypothetical CVE Report>> — introduces the hypothetical CVE used as a running example throughout this section
 * <<collaboration-clone,Clone Temporary Private Fork>> — clone the *temporary private fork* locally so subsequent steps can work against it
-* <<collaboration-sharing-sample,Sharing the sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
+* <<collaboration-sample,Sharing the sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
 * <<collaboration-using-sample,Using the sample>> — check out the reporter's sample locally to run and reproduce the issue
 * <<collaboration-fix,Producing a fix>> — commit a fix and share it on the private fork for team review
 
@@ -57,7 +57,7 @@ cd $_
 If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
 ====
 
-[[collaboration-sharing-sample]]
+[[collaboration-sample]]
 === Sharing the sample
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
@@ -66,13 +66,13 @@ As the *reporter*, the goal is to push your sample to an https://git-scm.com/doc
 The following example scripts show one way to achieve that goal:
 
 . <<collaboration-clone,Clone Temporary Private Fork>>
-. <<collaboration-sharing-sample-create-branch,Creating the sample branch>>
-. <<collaboration-sharing-sample-commit,Committing the sample branch>>
-. <<collaboration-sharing-sample-push,Pushing the sample branch>>
+. <<collaboration-sample-branch,Creating the sample branch>>
+. <<collaboration-sample-commit,Committing the sample branch>>
+. <<collaboration-sample-push,Pushing the sample branch>>
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
-[[collaboration-sharing-sample-create-branch]]
+[[collaboration-sample-branch]]
 ==== Creating the sample branch
 
 The goal is to create an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
@@ -90,7 +90,7 @@ git switch --orphan sample
 git commit --allow-empty -m "Start sample branch"
 ----
 
-[[collaboration-sharing-sample-commit]]
+[[collaboration-sample-commit]]
 ==== Committing the sample branch
 The goal is to have the sample committed on branch `sample`.
 The example script below copies the sample directory and commits it.
@@ -105,7 +105,7 @@ git add -A
 git commit -m "Add sample"
 ----
 
-[[collaboration-sharing-sample-push]]
+[[collaboration-sample-push]]
 ==== Pushing the sample branch
 
 The goal is to have branch `sample` pushed to the advisory remote so reviewers can access it.
@@ -145,7 +145,7 @@ The following example scripts show one way to achieve that goal:
 
 . <<collaboration-clone,Clone Temporary Private Fork>>
 . <<collaboration-fix-add-remote,Adding the remote and branch>>
-. <<collaboration-fix-apply-fix,Applying the fix>>
+. <<collaboration-fix-commit,Applying the fix>>
 . <<collaboration-fix-push,Pushing the fix>>
 . <<collaboration-fix-notify-reporter,Notifying the reporter>>
 
@@ -167,7 +167,7 @@ git fetch {public-repo-remote-name}
 git switch -c {target-branch} {public-repo-remote-name}/{target-branch}
 ----
 
-[[collaboration-fix-apply-fix]]
+[[collaboration-fix-commit]]
 ==== Applying the fix
 
 The goal is to have a fix committed on the branch (e.g. `{target-branch}`).
