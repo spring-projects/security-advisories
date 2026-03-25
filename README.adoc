@@ -15,7 +15,7 @@ As documented at https://spring.io/security-policy, this repository is used to r
 In particular, read <<cve-examples,What is a Valid CVE?>> before filing a report to confirm your issue qualifies.
 
 [[collaboration]]
-== Collaborating with code
+== Collaborating with Code
 
 Collaboration should use a https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/collaborating-in-a-temporary-private-fork-to-resolve-a-repository-security-vulnerability[temporary private fork] of this repository.
 
@@ -24,15 +24,15 @@ Each subsection describes the goal to achieve and provides example scripts as on
 
 * <<collaboration-example,A Hypothetical CVE Report>> — introduces the hypothetical CVE used as a running example throughout this section
 * <<collaboration-clone,Clone Temporary Private Fork>> — clone the *temporary private fork* locally so subsequent steps can work against it
-* <<collaboration-sample,Sharing the sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
-* <<collaboration-using-sample,Using the sample>> — check out the reporter's sample locally to run and reproduce the issue
-* <<collaboration-fix,Producing a fix>> — commit a fix and share it on the private fork for team review
+* <<collaboration-sample,Sharing the Sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
+* <<collaboration-using-sample,Using the Sample>> — check out the reporter's sample locally to run and reproduce the issue
+* <<collaboration-fix,Producing a Fix>> — commit a fix and share it on the private fork for team review
 
 
 [[collaboration-example]]
 === A Hypothetical CVE Report
 
-Throughout this documentation, we will use an example report related to a hypothetical **CVE in Spring Framework related to path validation**.
+Throughout this documentation, we will use an example report related to a hypothetical *CVE in Spring Framework related to path validation*.
 For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} and the branch of `{target-branch}`.
 
 [[collaboration-clone]]
@@ -58,7 +58,7 @@ If you want to update the instructions throughout this documentation, you can up
 ====
 
 [[collaboration-sample]]
-=== Sharing the sample
+=== Sharing the Sample
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
 As the *reporter*, the goal is to push your sample to an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the *private temporary fork* so the team can review it without publishing to the public repository or a public issue.
@@ -66,19 +66,19 @@ As the *reporter*, the goal is to push your sample to an https://git-scm.com/doc
 The following example scripts show one way to achieve that goal:
 
 . <<collaboration-clone,Clone Temporary Private Fork>>
-. <<collaboration-sample-branch,Creating the sample branch>>
-. <<collaboration-sample-commit,Committing the sample branch>>
-. <<collaboration-sample-push,Pushing the sample branch>>
+. <<collaboration-sample-branch,Creating the Sample Branch>>
+. <<collaboration-sample-commit,Committing the Sample Branch>>
+. <<collaboration-sample-push,Pushing the Sample Branch>>
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
 [[collaboration-sample-branch]]
-==== Creating the sample branch
+==== Creating the Sample Branch
 
 The goal is to create an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
 
-The example script below creates the branch and adds an empty initial commit so the ref exists for subsequent steps.
 <<collaboration-clone,Clone Temporary Private Fork>> must be completed first so the clone of the private temporary fork exists.
+The example script below creates the branch and adds an empty initial commit so the ref exists for subsequent steps.
 
 [source,shell,subs=+attributes]
 ----
@@ -91,7 +91,8 @@ git commit --allow-empty -m "Start sample branch"
 ----
 
 [[collaboration-sample-commit]]
-==== Committing the sample branch
+==== Committing the Sample Branch
+
 The goal is to have the sample committed on branch `sample`.
 The example script below copies the sample directory and commits it.
 
@@ -106,7 +107,7 @@ git commit -m "Add sample"
 ----
 
 [[collaboration-sample-push]]
-==== Pushing the sample branch
+==== Pushing the Sample Branch
 
 The goal is to have branch `sample` pushed to the advisory remote so reviewers can access it.
 The example script below pushes the branch and prints the GitHub URL.
@@ -121,7 +122,7 @@ git push -u {ghsa-remote-name} sample
 You can now view the sample at https://github.com/{ghsa-name-with-owner}/tree/sample.
 
 [[collaboration-using-sample]]
-=== Using the sample
+=== Using the Sample
 
 As a *team member*, the goal is to have the reporter's sample checked out locally so you can run and reproduce the issue.
 You need access to the private temporary fork (for example as a collaborator on the draft advisory).
@@ -137,7 +138,7 @@ git switch sample
 ----
 
 [[collaboration-fix]]
-=== Producing a fix
+=== Producing a Fix
 
 The goal of this section is to produce a fix and share it on the private temporary fork for review.
 
@@ -145,14 +146,14 @@ The following example scripts show one way to achieve that goal:
 
 . <<collaboration-clone,Clone Temporary Private Fork>>
 . <<collaboration-fix-add-remote,Adding the remote and branch>>
-. <<collaboration-fix-commit,Applying the fix>>
-. <<collaboration-fix-push,Pushing the fix>>
-. <<collaboration-fix-notify-reporter,Notifying the reporter>>
+. <<collaboration-fix-commit,Committing the Fix>>
+. <<collaboration-fix-push,Pushing the Fix>>
+. <<collaboration-fix-notify-reporter,Notifying the Reporter>>
 
 Review each block before you run it and align the defaults in <<collaboration-example,A Hypothetical CVE Report>> with your environment.
 
 [[collaboration-fix-add-remote]]
-==== Adding the remote and branch
+==== Adding the Remote and Branch
 
 The goal is to have a local branch tracking the affected branch (e.g. `{target-branch}`) of the public repository (e.g. `{public-name-with-owner}`) so you can apply a fix.
 The example script below adds the public repository as a remote and creates a local branch from it.
@@ -168,7 +169,7 @@ git switch -c {target-branch} {public-repo-remote-name}/{target-branch}
 ----
 
 [[collaboration-fix-commit]]
-==== Applying the fix
+==== Committing the Fix
 
 The goal is to have a fix committed on the branch (e.g. `{target-branch}`).
 Edit the codebase, run tests or the reporter's reproducer to verify, then stage and commit — the example script below shows the commit step.
@@ -183,7 +184,7 @@ git commit -m "Fix CVE"
 ----
 
 [[collaboration-fix-push]]
-==== Pushing the fix
+==== Pushing the Fix
 
 The goal is to have the fix branch pushed to the advisory remote so the team can review it on the private fork.
 The example script below pushes the branch and prints the GitHub URL.
@@ -198,14 +199,14 @@ git push -u {ghsa-remote-name} {target-branch}
 You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{target-branch}.
 
 [[collaboration-fix-notify-reporter]]
-==== Notifying the reporter
+==== Notifying the Reporter
 
-After <<collaboration-fix-push,Pushing the fix>>, notify the reporter and provide instructions for how to review the fix.
+After <<collaboration-fix-push,Pushing the Fix>>, notify the reporter and provide instructions for how to review the fix.
 If possible, you should consider updating the `sample` branch to demonstrate the fix.
 For example, you might update the `sample` branch to:
 
 * Align the version of the vulnerable dependency with the fix
-* If necessry, add a local Maven repository URL (e.g. Maven Local)
+* If necessary, add a local Maven repository URL (e.g. Maven Local)
 * Provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install`) on the fix branch (e.g. `{target-branch}`) of the private fork
 
 [[cve-examples]]
@@ -222,7 +223,7 @@ Real accepted Spring security advisories are published at https://spring.io/secu
 These serve as examples of valid CVEs; we link there rather than duplicate the content here.
 
 [[cve-examples-invalid]]
-=== Examples of Non-vulnerabilities
+=== Examples of Non-Vulnerabilities
 
 * <<cve-examples-invalid-command-injection-via-http-parameters>>
 * <<cve-examples-invalid-unsafe-deserialization>>
