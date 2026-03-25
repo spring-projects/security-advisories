@@ -9,9 +9,9 @@
 :target-branch: 7.0.x
 :toc:
 
-Before creating a report, please read through this document.
-
 As documented at https://spring.io/security-policy, this repository is used to report security advisories to any Spring Project.
+
+Before <<creating-report,creating a report>>, please read through this entire document.
 In particular, read <<cve-examples,What is a Valid CVE?>> before filing a report to confirm your issue qualifies.
 
 [[cve-examples]]
@@ -100,6 +100,119 @@ Reports about issues in Spring project versions that have reached end of life ar
 You can find the supported versions on https://spring.io[spring.io].
 For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
 
+[[creating-sample]]
+== Creating a Sample
+
+Before creating an advisory, you must create a <<creating-sample-minimal,minimal sample>>, which will be <<collaboration-sample,shared using a temporary private fork>>, that demonstrates the vulnerability.
+The sample must be a complete, self-contained application that demonstrates the vulnerability.
+
+[[creating-sample-minimal]]
+=== A Minimal Sample
+
+A minimal sample is somewhat subjective, but the best approach is to start by writing down the steps to reproduce the vulnerability.
+Then, remove any dependencies, code, or <<creating-sample-external-services,external services>> that are not used when reproducing the vulnerability.
+Unless specifically required to reproduce the issue, the sample application should be written in Java.
+Even if Spring Boot is not required, samples should use it to simplify the application setup and configuration.
+
+[[creating-sample-supported-versions]]
+=== Supported Versions
+
+The sample must use the latest patch version of a supported generation.
+You can find the supported versions on https://spring.io[spring.io].
+For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
+
+[[creating-sample-application-code]]
+=== Application Specific Code
+
+Application-specific code is expected, but it should only exist if it is necessary to reproduce the issue.
+Additionally, it cannot be the <<cve-examples-invalid-insecure-application-code,source of the vulnerability>>.
+
+Review any application-specific code and determine if it is the source of the vulnerability.
+Is the application code following best practices?
+Should the application code be doing what it is doing?
+
+[[creating-sample-external-services]]
+=== External Services
+
+Unless specifically required, external services (e.g. a database, message broker, or other service) should not be required to run the sample.
+When possible and required, external services should be automatically started using Spring Boot's https://docs.spring.io/spring-boot/reference/features/dev-services.html[Development-time Services].
+
+[[creating-report]]
+== Creating a Report
+
+Reports must be both concise (minimal) and precise (contain all necessary information).
+If they do not meet these requirements, you will be asked to fix the report before we proceed with triaging the issue.
+
+Before you create a report:
+
+* Review <<cve-examples,What is a Valid CVE?>>
+* Create a <<creating-sample,minimal sample>> that demonstrates the vulnerability
+
+Please copy the template below and paste it into the description of a https://github.com/spring-projects/security-advisories/security/advisories/new[new draft security advisory].
+Please be as concise as possible while still providing all necessary information.
+If the report is too long, you will be asked to fix it before we proceed with triaging the issue.
+
+[source,markdown]
+------
+
+### Summary of the CVE
+
+<!--
+1–3 sentence summary of the CVE
+-->
+
+### Advisory Checklist
+
+Ensure that you have completed ([and marked as complete](https://www.markdownguide.org/extended-syntax/#task-lists)) all of the following requirements:
+
+* [ ] The report includes a 1–3 sentence Summary of the CVE
+* [ ] The report includes a sample following the [Creating a Sample](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#creating-sample) guidelines.
+  * [ ] The sample is [minimal](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#creating-sample-minimal), is written in Java (unless the issue is specific to Kotlin), and does not have any unnecessary dependencies or complexity
+  * [ ] The sample uses the [latest patch version of a supported generation](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#creating-sample-supported-versions)
+  * [ ] The sample demonstrates a vulnerability in the Spring Project and not the [application code](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#creating-sample-application-code)
+  * [ ] The sample has been [shared on the sample branch](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#collaboration-sample).
+* [ ] Instructions on how to run the sample
+* [ ] Instructions on how to reproduce the issue
+* [ ] The expected result
+* [ ] The actual result and explain why it is a vulnerability
+
+### Instructions on running the minimal sample
+
+<!--
+Provide instructions on how to run the minimal sample.
+
+Use the instructions to review the sample and ensure that it is a [minimal sample](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#creating-sample-minimal).
+-->
+
+### Instructions on reproducing the issue
+
+<!--
+Use these instructions to figure out if your sample is a minimal sample.
+Try removing code and dependencies that are not used when following these instructions.
+
+Do the instructions use application-specific code?
+If so, double check that the application code is not the source of the vulnerability.
+-->
+
+### Describe the expected result
+
+<!--
+Provide a brief description of the expected behavior.
+
+For example, when a path containing `../` is provided, it should be rejected with a 400 Bad Request response to prevent directory traversal attacks.
+-->
+
+### Describe the actual result and explain why it is a vulnerability
+
+<!--
+Provide a brief description of the actual behavior.
+
+For example, when a path containing `../` is provided, it is resolved to a directory on the filesystem that should not be accessible.
+-->
+
+
+------
+
 [[collaboration]]
 == Collaborating with Code
 
@@ -119,7 +232,7 @@ Each subsection describes the goal to achieve and provides example scripts as on
 === A Hypothetical CVE Report
 
 Throughout this documentation, we will use an example report related to a hypothetical *CVE in Spring Framework related to path validation*.
-For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} and the branch of `{target-branch}`.
+For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} on branch `{target-branch}`.
 
 [[collaboration-clone]]
 === Clone Temporary Private Fork
@@ -287,10 +400,10 @@ You can now view the fix at https://github.com/{ghsa-name-with-owner}/tree/{targ
 [[collaboration-fix-notify-reporter]]
 ==== Notifying the Reporter
 
-After <<collaboration-fix-push,Pushing the Fix>>, notify the reporter and provide instructions for how to review the fix.
+After <<collaboration-fix-push,Pushing the Fix>>, notify the reporter and provide instructions on how to review the fix.
 If possible, you should consider updating the `sample` branch to demonstrate the fix.
 For example, you might update the `sample` branch to:
 
 * Align the version of the vulnerable dependency with the fix
 * If necessary, add a local Maven repository URL (e.g. Maven Local)
-* Provide the user with instructions for how to publish the fix locally (e.g. run `./mvn install`) on the fix branch (e.g. `{target-branch}`) of the private fork
+* Provide the user with instructions on how to publish the fix locally (e.g. run `./mvn install`) on the fix branch (e.g. `{target-branch}`) of the private fork
