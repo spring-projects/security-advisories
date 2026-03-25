@@ -231,7 +231,7 @@ The goal of this section is to produce a fix and share it on the private tempora
 The following example scripts show one way to achieve that goal:
 
 . <<collaboration-clone,Clone Temporary Private Fork>>
-. <<collaboration-fix-add-remote,Adding the remote and branch>>
+. <<collaboration-fix-add-remote,Adding the Remote and Branch>>
 . <<collaboration-fix-commit,Committing the Fix>>
 . <<collaboration-fix-push,Pushing the Fix>>
 . <<collaboration-fix-notify-reporter,Notifying the Reporter>>
