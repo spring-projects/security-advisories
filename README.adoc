@@ -23,7 +23,7 @@ This section outlines how to collaborate on a security advisory and is divided i
 Each subsection describes the goal to achieve and provides example scripts as one way to accomplish it — you are free to use any approach that achieves the same result.
 
 * <<collaboration-example,A Hypothetical CVE Report>> — introduces the hypothetical CVE used as a running example throughout this section
-* <<collaboration-setup,Collaboration Setup>> — clone the *temporary private fork* locally so subsequent steps can work against it
+* <<collaboration-clone,Clone Temporary Private Fork>> — clone the *temporary private fork* locally so subsequent steps can work against it
 * <<collaboration-sharing-sample,Sharing the sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
 * <<collaboration-using-sample,Using the sample>> — check out the reporter's sample locally to run and reproduce the issue
 * <<collaboration-fix,Producing a fix>> — commit a fix and share it on the private fork for team review
@@ -35,8 +35,8 @@ Each subsection describes the goal to achieve and provides example scripts as on
 Throughout this documentation, we will use an example report related to a hypothetical **CVE in Spring Framework related to path validation**.
 For the example report we will assume that the CVE is in https://github.com/{public-name-with-owner} and the branch of `{target-branch}`.
 
-[[collaboration-setup]]
-=== Collaboration Setup
+[[collaboration-clone]]
+=== Clone Temporary Private Fork
 
 The goal of this step is to clone the *temporary private fork* locally so subsequent steps can work against it.
 
@@ -62,11 +62,10 @@ If you want to update the instructions throughout this documentation, you can up
 
 Before you report a security advisory, you should already have a minimal reproducer (a sample).
 As the *reporter*, the goal is to push your sample to an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the *private temporary fork* so the team can review it without publishing to the public repository or a public issue.
-<<collaboration-setup,Collaboration Setup>> must be completed first so the clone of the private temporary fork exists.
 
 The following example scripts show one way to achieve that goal:
 
-. <<collaboration-setup,Collaboration Setup>>
+. <<collaboration-clone,Clone Temporary Private Fork>>
 . <<collaboration-sharing-sample-create-branch,Creating the sample branch>>
 . <<collaboration-sharing-sample-commit,Committing the sample branch>>
 . <<collaboration-sharing-sample-push,Pushing the sample branch>>
@@ -77,7 +76,9 @@ Review each block before you run it and align the defaults in <<collaboration-ex
 ==== Creating the sample branch
 
 The goal is to create an https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-orphan[orphan branch] named `sample` on the private temporary fork clone.
+
 The example script below creates the branch and adds an empty initial commit so the ref exists for subsequent steps.
+<<collaboration-clone,Clone Temporary Private Fork>> must be completed first so the clone of the private temporary fork exists.
 
 [source,shell,subs=+attributes]
 ----
@@ -126,7 +127,7 @@ As a *team member*, the goal is to have the reporter's sample checked out locall
 You need access to the private temporary fork (for example as a collaborator on the draft advisory).
 
 The example script below is one way to achieve that: it switches to branch `sample` in the fork clone.
-<<collaboration-setup,Collaboration Setup>> must be completed first so the clone exists.
+<<collaboration-clone,Clone Temporary Private Fork>> must be completed first so the clone exists.
 
 [source,shell,subs=+attributes]
 ----
@@ -142,7 +143,7 @@ The goal of this section is to produce a fix and share it on the private tempora
 
 The following example scripts show one way to achieve that goal:
 
-. <<collaboration-setup,Collaboration Setup>>
+. <<collaboration-clone,Clone Temporary Private Fork>>
 . <<collaboration-fix-add-remote,Adding the remote and branch>>
 . <<collaboration-fix-apply-fix,Applying the fix>>
 . <<collaboration-fix-push,Pushing the fix>>
