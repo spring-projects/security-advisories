@@ -24,7 +24,7 @@ The sections below provide concrete examples of both qualifying and non-qualifyi
 [[cve-examples-valid]]
 === Examples of Vulnerabilities
 
-Real accepted Spring security advisories are published at https://spring.io/security/.
+Real, accepted Spring security advisories are published at https://spring.io/security/.
 These serve as examples of valid CVEs; we link there rather than duplicate the content here.
 
 [[cve-examples-invalid]]
@@ -71,10 +71,10 @@ The Spring team's stance is that, in order for deserialization to be considered 
 The reason for this stance is that deserialization of arbitrary types is necessary but cannot be made secure.
 
 Spring provides necessary tools for developers, but it is the responsibility of the developer to use them securely.
-This is no different than any other library or the JDK itself.
+This is no different from any other library or the JDK itself.
 If a developer passes untrusted data from an HTTP request to `ProcessBuilder`, then it is not a CVE in the JDK but in the <<cve-examples-invalid-insecure-application-code,application that used `ProcessBuilder` incorrectly>>.
 If a developer uses untrusted data to create an SQL query by using String concatenation, it is not a CVE in the SQL driver but in the application for not using prepared SQL statements.
-Similarly, if a developer passes untrusted data into a deserialization method, it is the developer that needs to ensure it is safe to do so.
+Similarly, if a developer passes untrusted data into a deserialization method, it is the developer who needs to ensure it is safe to do so.
 
 [[cve-examples-invalid-vulnerabilities-dependencies]]
 ==== Vulnerabilities in Dependencies
@@ -90,7 +90,7 @@ However, we do not consider it a vulnerability in Spring when Spring defines a v
 It is up to the developer of the dependency to release a compatible version with the security fix.
 If this is made available, the Spring project will be updated to that dependency version prior to releasing the next version of the Spring project.
 
-Typically, there is not a special release for updating dependency versions.
+Typically, there is no special release for updating dependency versions.
 Instead, the Spring team encourages developers to override the version until the next Spring release.
 
 [[cve-examples-invalid-unsupported-versions]]
