@@ -217,9 +217,13 @@ For example, when a path containing `../` is provided, it should be rejected wit
 ### Describe the actual result and explain why it is a vulnerability
 
 <!--
-Provide a brief description of the actual behavior.
+Provide a brief description of the actual behavior and why it is a vulnerability.
 
-For example, when a path containing `../` is provided, it is resolved to a directory on the filesystem that should not be accessible.
+The result itself must be a vulnerability and not something that can just lead to a vulnerability under other circumstances.
+
+Valid: For example, when a path containing `../` is provided, it is resolved to a directory on the filesystem that should not be accessible.
+
+Invalid: The application can contain paths that contain `../` and may lead to directory traversal attacks.
 -->
 
 
