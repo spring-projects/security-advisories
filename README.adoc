@@ -121,6 +121,8 @@ A minimal sample is somewhat subjective, but the best approach is to start by wr
 Then, remove any dependencies, code, or <<creating-sample-external-services,external services>> that are not used when reproducing the vulnerability.
 Unless specifically required to reproduce the issue, the sample application should be written in Java.
 Even if Spring Boot is not required, samples should use it to simplify the application setup and configuration.
+However, unless specifically required to reproduce the issue, the sample application should not be setup to run Spring Boot in a container (e.g. Docker, Kubernetes, etc.).
+If the directions to run the sample run Spring Boot in a container, then you must exaplain why this is necessary to reproduce the issue.
 
 [[creating-sample-supported-versions]]
 === Supported Versions
