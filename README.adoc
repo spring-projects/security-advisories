@@ -35,6 +35,7 @@ These serve as examples of valid CVEs; we link there rather than duplicate the c
 * <<cve-examples-invalid-vulnerabilities-dependencies>>
 * <<cve-examples-invalid-vulnerable-dependency-versions>>
 * <<cve-examples-invalid-unsupported-versions>>
+* <<cve-examples-invalid-unrealistic-environments>>
 
 [[cve-examples-invalid-insecure-application-code]]
 ==== Insecure Application Code
@@ -100,6 +101,13 @@ Reports about issues in Spring project versions that have reached end of life ar
 You can find the supported versions on https://spring.io[spring.io].
 For example, Spring Boot's supported versions can be found at https://spring.io/projects/spring-boot#support.
 
+[[cve-examples-invalid-unrealistic-environments]]
+==== Unrealistic Environments
+
+Steps to reproduce the exploit must describe a realistic environment.
+For example, CSRF occurs in a browser and thus the steps to reproduce the exploit must be explained through a browser.
+Providing a shell script to demonstrate the exploit is invalid in this scenario because it can do things that will not happen in a browser and CSRF attacks are a browser-specific attack.
+
 [[creating-sample]]
 == Creating a Sample
 
@@ -136,13 +144,6 @@ Should the application code be doing what it is doing?
 
 Unless specifically required, external services (e.g. a database, message broker, or other service) should not be required to run the sample.
 When possible and required, external services should be automatically started using Spring Boot's https://docs.spring.io/spring-boot/reference/features/dev-services.html[Development-time Services].
-
-[[creating-sample-environment]]
-=== Using a Realistic Environment
-
-When writing the steps to reproduce the exploit, ensure that the steps are described in a realistic environment.
-For example, CSRF occurs in a browser and thus the steps to reproduce the exploit should be explained through a browser.
-This means that providing a shell script to demonstrate the exploit is invalid in this scenario because it can do things that will not happen in a browser and CSRF attacks are a browser specific attack.
 
 [[creating-report]]
 == Creating a Report
@@ -199,6 +200,8 @@ Try removing code and dependencies that are not used when following these instru
 
 Do the instructions use application-specific code?
 If so, double check that the application code is not the source of the vulnerability.
+
+Ensure the steps describe a [realistic environment](https://github.com/spring-projects/security-advisories?tab=readme-ov-file#cve-examples-invalid-unrealistic-environments).
 -->
 
 ### Describe the expected result
