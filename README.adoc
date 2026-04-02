@@ -1,6 +1,6 @@
 = Spring Security Policy
 // See A Hypothetical CVE Report for attribute descriptions.
-:ghsa-name-with-owner: spring-projects/security-advisories-ghsa-3rf2-292v-g6wr
+:ghsa-name-with-owner: spring-projects/security-advisories-ghsa-CHANGE-ME
 :ghsa-remote-name: ghsa-path-validation
 :base-clone-dir: ~/code
 :cve-sample-dir: ~/code/sample-cve
@@ -228,12 +228,18 @@ Collaboration should use a https://docs.github.com/en/code-security/security-adv
 This section outlines how to collaborate on a security advisory and is divided into the following subsections.
 Each subsection describes the goal to achieve and provides example scripts as one way to accomplish it — you are free to use any approach that achieves the same result.
 
+[WARNING]
+====
+The scripts are examples that need to be changed to reflect your environment.
+
+If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
+====
+
 * <<collaboration-example,A Hypothetical CVE Report>> — introduces the hypothetical CVE used as a running example throughout this section
 * <<collaboration-clone,Clone Temporary Private Fork>> — clone the *temporary private fork* locally so subsequent steps can work against it
 * <<collaboration-sample,Sharing the Sample>> — push a minimal reproducer to an orphan branch on the private fork so the team can review it
 * <<collaboration-using-sample,Using the Sample>> — check out the reporter's sample locally to run and reproduce the issue
 * <<collaboration-fix,Producing a Fix>> — commit a fix and share it on the private fork for team review
-
 
 [[collaboration-example]]
 === A Hypothetical CVE Report
@@ -246,7 +252,8 @@ For the example report we will assume that the CVE is in https://github.com/{pub
 
 The goal of this step is to clone the *temporary private fork* locally so subsequent steps can work against it.
 
-The example script below clones the *temporary private fork*, but you are free to clone it any way you want.
+The example script below clones a *temporary private fork*, but you are free to clone it any way you want.
+Before cloning, you will need to ensure that the *temporary private fork* [has been created](https://docs.github.com/en/code-security/tutorials/fix-reported-vulnerabilities/collaborate-in-a-fork#creating-a-temporary-private-fork).
 
 [source,shell,subs=+attributes]
 ----
@@ -257,11 +264,6 @@ git clone \
   {base-clone-dir}/{ghsa-remote-name}
 cd $_
 ----
-
-[NOTE]
-====
-If you want to update the instructions throughout this documentation, you can update the corresponding https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes/[AsciiDoc document attribute] (`:name: value`) at the top of this README and re-render the README to see the changes.
-====
 
 [[collaboration-sample]]
 === Sharing the Sample
