@@ -36,6 +36,7 @@ These serve as examples of valid CVEs; we link there rather than duplicate the c
 * <<cve-examples-invalid-vulnerable-dependency-versions>>
 * <<cve-examples-invalid-unsupported-versions>>
 * <<cve-examples-invalid-unrealistic-environments>>
+* <<cve-examples-invalid-samples-not-cve>>
 
 [[cve-examples-invalid-insecure-application-code]]
 ==== Insecure Application Code
@@ -107,6 +108,16 @@ For example, Spring Boot's supported versions can be found at https://spring.io/
 Steps to reproduce the exploit must describe a realistic environment.
 For example, CSRF occurs in a browser and thus the steps to reproduce the exploit must be explained through a browser.
 Providing a shell script to demonstrate the exploit is invalid in this scenario because it can do things that will not happen in a browser and CSRF attacks are a browser-specific attack.
+
+[[cve-examples-invalid-samples-not-cve]]
+==== Samples Are Not a CVE
+
+Official samples, guides, and minimal reproducers (including those you submit with a report) are intentionally narrow.
+They cannot cover every production concern, so limitations in sample code are not treated as vulnerabilities in Spring.
+
+For example, samples often use in-memory stores or caches for simplicity, which can grow without bound and cause out-of-memory errors in a real deployment.
+They may omit or relax security configuration so readers can follow the topic without first mastering the full security model.
+Those trade-offs keep the sample focused; they are not evidence of a CVE in Spring itself.
 
 [[creating-sample]]
 == Creating a Sample
