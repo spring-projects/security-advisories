@@ -31,6 +31,7 @@ These serve as examples of valid CVEs; we link there rather than duplicate the c
 === Examples of Non-Vulnerabilities
 
 * <<cve-examples-invalid-insecure-application-code>>
+* <<cve-examples-invalid-trusted-deployers>>
 * <<cve-examples-invalid-unsafe-deserialization>>
 * <<cve-examples-invalid-vulnerabilities-dependencies>>
 * <<cve-examples-invalid-vulnerable-dependency-versions>>
@@ -65,6 +66,14 @@ class HasCveCommandController {
 Spring's role is to route the HTTP request and bind parameters — it has no knowledge of, or responsibility for, what the developer does with those values.
 The developer is responsible for validating or sanitizing untrusted input before passing it to any sensitive API such as `ProcessBuilder`, `Runtime.exec`, or similar.
 If such a controller is exploited to execute arbitrary commands, the CVE belongs to the application, not to Spring MVC.
+For why reports that treat people with deployment privileges as the attacker are out of scope, see <<cve-examples-invalid-trusted-deployers,Trusted Developers and Administrators>>.
+
+[[cve-examples-invalid-trusted-deployers]]
+==== Trusted Developers and Administrators
+
+Generally, developers and administrators who configure and deploy the application are trusted.
+If a report assumes that they are malicious—for example, that they will introduce application code like the <<cve-examples-invalid-insecure-application-code,controller that runs a process>> solely to manufacture an exploit—then the report is invalid.
+Valid CVE reports concern what untrusted actors can do through the application's normal externally exposed behavior, not what a privileged deployer could intentionally misconfigure or add.
 
 [[cve-examples-invalid-unsafe-deserialization]]
 ==== Unsafe Deserialization
